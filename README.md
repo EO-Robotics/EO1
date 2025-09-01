@@ -9,13 +9,13 @@
       alt="EO-Robotics Website"
     />
   </a>
-  <a href="https://arxiv.org/abs/TODO">
+  <a href="https://arxiv.org/abs/2508.21112">
     <img
       src="https://img.shields.io/badge/EO--1-Paper-red?logo=arxiv&logoColor=red"
       alt="EO-Robotics Paper on arXiv"
     />
   </a>
-  <a href="https://huggingface.co/collections/IPEC-COMMUNITY/eo-robotics-68ac4ff30e1f746cac28ca14">
+  <a href="https://huggingface.co/IPEC-COMMUNITY/EO-1-3B">
     <img 
         src="https://img.shields.io/badge/EO--1--3B-Model-FFCC11?logo=huggingface&logoColor=brightyellow" 
         alt="EO-1 Model"
@@ -217,10 +217,10 @@ Robot Control Benchmark Results
 
 ## 📅 Roadmap
 
-- [ ] 🤗 Release models: `EO-1-3B`, `EO-1-3B-Bridge` and `EO-1-3B-Fractal`.
-- [ ] 🔥 Release Interleaved Dataset `EO-Data1.5M`, benchmark `EO-Bench` and all the pre-training code.
-- [ ] ⚡️ Efficient LLM Inference over Long Sequences.
-- [ ] 🤖 Integrate with RLHF for human feedback fine-tuning.
+- [ ] 🤗 Release [pre-training models](https://huggingface.co/collections/IPEC-COMMUNITY/eo-robotics-68ac4ff30e1f746cac28ca14) and experiment finetune scripts.
+- [ ] 🔥 Release Interleaved Dataset `EO-Data1.5M`, benchmark `EO-Bench` and all detailed pre-training code.
+- [ ] ⚡️ Efficient LLM Inference over Long Sequences, Efficient KV-cache, etc.
+- [ ] 🤖 Integrate with human feedback fine-tuning.
 
 ## 🤝 Contributing
 We welcome contributions! Please check out CONTRIBUTING.md. Join our community on Discord.
@@ -230,11 +230,12 @@ We welcome contributions! Please check out CONTRIBUTING.md. Join our community o
 If you find this project useful, please consider citing:
 
 ```bibtex
-@article{eo-robotics,
+@article{eo-1,
   title={EmbodiedOneVision: Interleaved Vision-Text-Action Pretraining for General Robot Control},
-  author={Qu, Delin and Song, Haoming and Chen, Qizhi and Chen, Zhaoqing, and Gao Xianqiang, and Ye, Xinyi, and Modi Shi, and Guanghui Ren and Maoqing Yao, and Zhao, Bin and Wang, Dong},
+  author={Delin Qu and Haoming Song and Qizhi Chen and Zhaoqing Chen and Xianqiang Gao and Xinyi Ye and Qi Lv and Modi Shi and Guanghui Ren and Cheng Ruan and Maoqing Yao and Haoran Yang and Jiacheng Bao and Bin Zhao and Dong Wang},
   journal={arXiv preprint},
-  year={2025}
+  year={2025},
+  url={https://arxiv.org/abs/2508.21112}
 }
 ```
 
@@ -242,9 +243,9 @@ If you find this project useful, please consider citing:
 ## Acknowledgement
 
 **EO-1** is built with reference to the code of the following projects: 
-- [Qwen2.5-VL](https://github.com/QwenLM/Qwen2.5-VL)
-- [Qwen2-VL-Finetune](https://github.com/2U1/Qwen2-VL-Finetune)
 - [LERobot](https://github.com/huggingface/lerobot)
 - [Any4LERobot](https://github.com/Tavish9/any4lerobot)
+- [Qwen2.5-VL](https://github.com/QwenLM/Qwen2.5-VL)
+- [Qwen2-VL-Finetune](https://github.com/2U1/Qwen2-VL-Finetune)
 
 Thanks for their awesome work!
