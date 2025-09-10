@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.png" width="100%">
+  <img src=".assets/logo.png" width="100%">
 </p>
 
 <p align="left">
@@ -16,14 +16,14 @@
     />
   </a>
   <a href="https://huggingface.co/IPEC-COMMUNITY/EO-1-3B">
-    <img 
-        src="https://img.shields.io/badge/EO--1--3B-Model-FFCC11?logo=huggingface&logoColor=brightyellow" 
+    <img
+        src="https://img.shields.io/badge/EO--1--3B-Model-FFCC11?logo=huggingface&logoColor=brightyellow"
         alt="EO-1 Model"
     />
   </a>
   <a href="https://huggingface.co/spaces/IPEC-COMMUNITY/EO-Robotics">
-    <img 
-        src="https://img.shields.io/badge/EO--Robotics-Space-orange?logo=huggingface&logoColor=brightyellow" 
+    <img
+        src="https://img.shields.io/badge/EO--Robotics-Space-orange?logo=huggingface&logoColor=brightyellow"
         alt="EO-Robotics Model"
     />
   </a>
@@ -57,7 +57,7 @@ We introduce **EO-1** model, an open-source unified embodied foundation model co
 - 🤖 **Reasoning-Enhanced Generalization**: Superior generalization capabilities with multimodal embodied reasoning and real robot control.
 
 <p align="left">
-  <img src="assets/embodiments.png" width="100%">
+  <img src=".assets/embodiments.png" width="100%">
 </p>
 
 ## Installation Guidance
@@ -65,22 +65,32 @@ We introduce **EO-1** model, an open-source unified embodied foundation model co
 ### 0. Install dependencies
 
 Clone the repository:
+
 ```bash
 git clone https://github.com/EO-Robotics/EO.git
 cd EO
 ```
 
 Create a conda environment and install dependencies:
+
 ```bash
+# create conda environment
 conda create -n eo python=3.10
 conda activate eo
 pip install --upgrade setuptools
-pip install --no-build-isolation flash-attn==2.7.1.post1
-pip install -r requirements.txt
+
+# install flash-attn 2
+MAX_JOBS=4 pip install flash-attn==2.8.3 --no-build-isolation
+
+# or install from source for H100 / H800 GPU, CUDA 12.8 for best performance
+# git clone https://github.com/Dao-AILab/flash-attn.git -b v2.8.3 --recursive --depth 1
+# cd hopper && python setup.py install
+
 pip install -e .
 ```
 
 ### 1. Inference with pre-trained model
+
 **EO-1** is built entirely on 🤗 HuggingFace Transformers and Lerobot, making deployment straightforward and accessible. If your environment supports transformers and lerobot, you can load the model and run inference directly with just a few lines of code (requires ~6.5GB GPU memory). **EO-1** unifies high-level embodied reasoning with low-level robot control, producing either natural language outputs or actionable robot commands.
 
 ```python
@@ -88,8 +98,8 @@ from transformers import AutoModel, AutoProcessor
 # load the model and processor
 processor = AutoProcessor.from_pretrained("IPEC-COMMUNITY/EO-1-3B", trust_remote_code=True)
 model = AutoModel.from_pretrained(
-  "IPEC-COMMUNITY/EO-1-3B", 
-  trust_remote_code=True, 
+  "IPEC-COMMUNITY/EO-1-3B",
+  trust_remote_code=True,
   torch_dtype=torch.bfloat16
 ).eval().cuda()
 
@@ -109,18 +119,21 @@ actions = output.action.numpy()
 ```
 
 ### 3. Datasets
+
 We use [LeRobot](https://github.com/huggingface/lerobot) as the primary source for robot control training and evaluation, with [Any4LeRobot](https://github.com/Tavish9/any4lerobot) providing convenient data conversion and preprocessing utilities.
 For Multimodal data, e.g., image, video, text, points and bounding boxes, we follow the [Qwen2.5-VL](https://colab.research.google.com/github/QwenLM/Qwen2.5-VL/blob/main/cookbooks/spatial_understanding.ipynb) and [Qwen2-VL-Finetune](https://github.com/2U1/Qwen2-VL-Finetune) recipes. In interleaved pretraining, we integrate the EO-Data1.5M dataset — a large-scale, high-quality embodied dataset designed to unify reasoning and control. Data are organized in a standardized format as shown below:
-<p align="left"> <img src="assets/data_example.png" width="100%"> </p>
+
+<p align="left"> <img src=".assets/data_example.png" width="100%"> </p>
 Here, the `lerobot` and `view` fields connect actions with multimodal conversations, enabling the model to capture the rich temporal dynamics and causal dependencies among vision, language, and action modalities — a core requirement for robust performance in open-world embodied interactions.
 
 To combine robot control data and multimodal data, we support a flexible YAML-based configuration, where each dataset can be assigned weights and sampling strategies. This makes it easy to balance embodied control trajectories with multimodal reasoning data for interleaved training. For example:
+
 ```yaml
 # configs/example.yaml
 mm_datasets: # optional
   - json_path: LEROBOT_DATASET/bridge_interleaved_data.jsonl
     sampling_strategy: random:5%
-  
+
   - json_path: RefCOCO/refcoco.jsonl
     sampling_strategy: random:10%
 
@@ -130,31 +143,41 @@ lerobot_datasets:
 ```
 
 ### 2. Fine-tuning on your dataset
+
 **EO-1**, Mastering Diverse Manipulations on Multiple Embodiments, demonstrates its robustness and adaptability by performing a wide range of dexterous manipulation tasks across heterogeneous robotic platforms. We evaluate its performance on both short-horizon and long-horizon tasks, spanning Franka Panda, WidowX 250 S, AgiBot G-1, and LeRobot SO100.
+
 <p align="left">
-  <img src="assets/merged_grid.gif" width="100%">
+  <img src=".assets/merged_grid.gif" width="100%">
 </p>
 
 To fine-tune **EO-1** on your own embodiment, you only need to adapt the configuration file. Specifically, convert your dataset into the LeRobot format, then define the fields that describe where your videos, states, and actions are located. The following YAML snippet shows a typical setup:
 
 ```yaml
 # @multimodal corpora
-mm_datasets: 
+mm_datasets:
 
 # @robot control episodes
 lerobot_datasets:
   - repo_id: AgiBotWorld-Beta/example001 # dataset identifier
     root: /oss/vla_next/DATA # path to the dataset root directory
-    
+
     # Optional fields:
     train_subtask: mixture:0.9 # mix sub-task instructions and overall instructions with 90% sub-task
     delta_action: false # train with delta actions
-    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right] # which camera streams to load
-    select_state_keys: [observation.states.joint.position, observation.states.effector.position] # proprioceptive states
+    select_video_keys: [
+        observation.images.head,
+        observation.images.hand_left,
+        observation.images.hand_right,
+      ] # which camera streams to load
+    select_state_keys: [
+        observation.states.joint.position,
+        observation.states.effector.position,
+      ] # proprioceptive states
     select_action_keys: [actions.joint.position, actions.effector.position] # the action targets to supervise during training
     select_effector_keys: [actions.effector.position] # effector control channels
     effector_indices: [14, 15] # indices of effector channels in the flattened action vector
 ```
+
 Once your dataset is prepared and the configuration file (e.g., example.yaml) is set up, you can launch fine-tuning with the following command. We use torchrun to support distributed or multi-GPU training, while the arguments control training mode, optimization, and which model components to freeze or update.
 
 ```bash
@@ -189,7 +212,7 @@ torchrun $TORCH_RUN_ARGS onvisfm/train.py \
 Mastering Diverse Manipulations on Multiple Embodiments
 
 | Model        | Franka Pick-and-Place (7 Tasks) | AgiBot Long-horizon Dexterity (4 Tasks) | WidowX Out-of-Box (13 Tasks) | Reasoning Control (4 Tasks) |
-|--------------|---------------------------------|-----------------------------------------|------------------------------|-----------------------------|
+| ------------ | ------------------------------- | --------------------------------------- | ---------------------------- | --------------------------- |
 | $\pi_0$-fast | 0.610                           | 0.449                                   | 0.227                        | —                           |
 | $\pi_0$      | 0.831                           | 0.672                                   | 0.693                        | 0.525                       |
 | GR00T-N1.5   | 0.857                           | 0.681                                   | 0.705                        | 0.617                       |
@@ -198,7 +221,7 @@ Mastering Diverse Manipulations on Multiple Embodiments
 Multi-modal Benchmark Results
 
 | Model               | RoboVQA  | ERQA     | EO-Bench @ Spatial | EO-Bench @ Temporal | Overall  |
-|---------------------|----------|----------|--------------------|---------------------|----------|
+| ------------------- | -------- | -------- | ------------------ | ------------------- | -------- |
 | Claude 3.5          | 26.7     | 35.5     | 24.0               | 34.8                | 30.3     |
 | GPT-4o (2024-11-20) | 47.2     | 40.0     | 35.6               | 39.3                | 40.5     |
 | Qwen2.5 VL 3B       | 55.9     | 35.3     | 20.0               | 22.6                | 33.5     |
@@ -208,7 +231,7 @@ Multi-modal Benchmark Results
 Robot Control Benchmark Results
 
 | Model        | LIBERO    | Simpler @ Google VM | Simpler @ Google VA | Simpler @ WidowX VM |
-|--------------|-----------|---------------------|---------------------|---------------------|
+| ------------ | --------- | ------------------- | ------------------- | ------------------- |
 | $\pi_0$      | 0.942     | 0.714               | 0.714               | 0.692               |
 | $\pi_0$-fast | 0.855     | 0.464               | 0.464               | 0.321               |
 | GR00T-N1     | 0.939     | —                   | —                   | —                   |
@@ -223,6 +246,7 @@ Robot Control Benchmark Results
 - [ ] 🤖 Integrate with human feedback fine-tuning.
 
 ## 🤝 Contributing
+
 We welcome contributions! Please check out CONTRIBUTING.md. Join our community on Discord.
 
 ## 📚 Citation
@@ -239,10 +263,10 @@ If you find this project useful, please consider citing:
 }
 ```
 
-
 ## Acknowledgement
 
-**EO-1** is built with reference to the code of the following projects: 
+**EO-1** is built with reference to the code of the following projects:
+
 - [LERobot](https://github.com/huggingface/lerobot)
 - [Any4LERobot](https://github.com/Tavish9/any4lerobot)
 - [Qwen2.5-VL](https://github.com/QwenLM/Qwen2.5-VL)

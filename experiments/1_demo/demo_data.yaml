@@ -1,0 +1,8 @@
+mm_datasets:
+  - json_path: demo_data/libero_spatial_mmu.jsonl
+  # - json_path: demo_data/refcoco/refcoco.jsonl
+  #   vision_base_path: demo_data/refcoco
+
+lerobot_datasets:
+  - repo_id: libero_spatial_no_noops_1.0.0_lerobot
+    root: ./demo_data
