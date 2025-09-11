@@ -209,12 +209,14 @@ torchrun $TORCH_RUN_ARGS onvisfm/train.py \
 ## More Examples
 
 ### Getting Started Tutorials
+
 - [Load Dataset and Customization](getting_started/1_load_dataset.ipynb) - Learn how to load and customize datasets in LeRobot format
 - [Fine-tuning on Custom Data](getting_started/2_train_finetune.ipynb) - Step-by-step guide for training EO-1 on your own data
 - [Evaluation and Deployment](getting_started/3_eval_deploy.ipynb) - Deploy trained models and run evaluations
 - [Advanced Pre-training](getting_started/4_advanced_pretrain.ipynb) - Large-scale pre-training workflows
 
 ### Experiment Examples
+
 - [Demo Training](experiments/1_demo/) - Quick start with demo data and debug mode
 - [Libero Benchmark](experiments/2_libero/) - Spatial reasoning tasks and evaluation
 - [SimplerEnv Benchmark](experiments/3_simpler/) - Real-world deployment on WidowX and Google Robot

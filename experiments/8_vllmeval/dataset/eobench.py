@@ -87,7 +87,7 @@ class EOBench(ImageBaseDataset):
         if len(matches) == 0:
             return ""
         else:
-            matches = set(mat.upper() for mat in matches)
+            matches = {mat.upper() for mat in matches}
             return "".join(matches)
 
     def evaluate(self, eval_file, **judge_kwargs):

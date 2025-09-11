@@ -15,7 +15,7 @@ class RoboVQA(VideoBaseDataset):
 You will receive {} distinct frames that have been uniformly sampled from a video sequence, arranged in the same temporal order as they appear in the video.
 You are a robot task planning assistant. Analyze these frames and provide a **short and accurate** answer following the exact format below.
 
-**Rules:** 
+**Rules:**
 
 Answer "done" when goal completed, follow exact format, use specific actions, keep concise.
 
@@ -49,7 +49,7 @@ case 2. Task Planning, answer with a specific action OR "done" (if task complete
     human: image or video Q: what is likely to happen next?
     gpt:  put book on the table
 
-    
+
 case 3. Event Understanding, answer with a specific action
     Example 1:
     human: image or video Q: what just happened?
@@ -63,7 +63,7 @@ Please analyze the frames and answer accordingly.
     FRAMES_TMPL_SYS_4VIDEO_LLM = """
 You will receive several distinct frames that have been uniformly sampled from a video sequence, arranged in the same temporal order as they appear in the video.
 Please analyze these frames and provide a **short and accurate** answer answer following the exact format below.
-**Rules:** 
+**Rules:**
 
 Answer "done" when goal completed, follow exact format, use specific actions, keep concise.
 
@@ -123,7 +123,7 @@ Please analyze the frames and answer accordingly.
         data = {"id": [], "question": [], "answer": [], "video": []}
 
         # load jsonl file
-        with open(self.data_file, "r") as f:
+        with open(self.data_file) as f:
             for line in f:
                 line = json.loads(line)
                 for i in range(len(line["conversations"]) // 2):

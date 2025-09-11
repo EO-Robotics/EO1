@@ -1,4 +1,3 @@
-
 # VLLM Evaluation on Vision-Language Benchmarks
 
 This directory contains the implementation for evaluating EO-1 on multiple vision-language benchmarks using the VLMEvalKit framework.
@@ -8,11 +7,13 @@ This directory contains the implementation for evaluating EO-1 on multiple visio
 The evaluation covers three comprehensive benchmarks designed to test different aspects of vision-language understanding:
 
 ### Benchmarks
+
 - **EO-Bench**: End-to-end evaluation benchmark for embodied AI tasks
-- **ERQABench**: Embodied Reasoning and Question Answering benchmark  
+- **ERQABench**: Embodied Reasoning and Question Answering benchmark
 - **RoboVQA**: Robotic Visual Question Answering benchmark
 
 These benchmarks test the model's ability to:
+
 - Understand complex visual scenes and spatial relationships
 - Answer questions about robotic manipulation tasks
 - Reason about cause-and-effect relationships in embodied scenarios
@@ -101,43 +102,43 @@ Create a configuration file (`dataset-config.json`) with the following settings:
 
 ```json
 {
-    "model": {
-        "EO1-3B": {
-            "class": "EO1VisionFlowMatchingChat",
-            "min_pixels": 50176,
-            "max_pixels": 100352,
-            "use_custom_prompt": false,
-            "model_path": "IPEC-COMMUNITY/EO-1-3B"
-        }
-    },
-    "data": {
-        "EOBench": {
-            "class": "EOBench",
-            "dataset": "EOBench",
-            "data_file": "IPEC-COMMUNITY/EO-Bench/benchmark_v1.jsonl",
-            "data_root": "IPEC-COMMUNITY/EO-Bench"
-        },
-        "ERQABench": {
-            "class": "ERQABench",
-            "dataset": "ERQABench",
-            "data_root": "IPEC-COMMUNITY/ERQABench",
-            "data_file": "IPEC-COMMUNITY/ERQABench/benchmark_v1.jsonl"
-        },
-        "RoboVQA": {
-            "class": "RoboVQA",
-            "dataset": "RoboVQA",
-            "data_root": "IPEC-COMMUNITY/RoboVQA",
-            "data_file": "IPEC-COMMUNITY/RoboVQA/benchmark_v1.jsonl",
-            "fps": 1
-        }
+  "model": {
+    "EO1-3B": {
+      "class": "EO1VisionFlowMatchingChat",
+      "min_pixels": 50176,
+      "max_pixels": 100352,
+      "use_custom_prompt": false,
+      "model_path": "IPEC-COMMUNITY/EO-1-3B"
     }
+  },
+  "data": {
+    "EOBench": {
+      "class": "EOBench",
+      "dataset": "EOBench",
+      "data_file": "IPEC-COMMUNITY/EO-Bench/benchmark_v1.jsonl",
+      "data_root": "IPEC-COMMUNITY/EO-Bench"
+    },
+    "ERQABench": {
+      "class": "ERQABench",
+      "dataset": "ERQABench",
+      "data_root": "IPEC-COMMUNITY/ERQABench",
+      "data_file": "IPEC-COMMUNITY/ERQABench/benchmark_v1.jsonl"
+    },
+    "RoboVQA": {
+      "class": "RoboVQA",
+      "dataset": "RoboVQA",
+      "data_root": "IPEC-COMMUNITY/RoboVQA",
+      "data_file": "IPEC-COMMUNITY/RoboVQA/benchmark_v1.jsonl",
+      "fps": 1
+    }
+  }
 }
 ```
 
 ### Configuration Parameters
 
 - **min_pixels**: 50176 - Minimum image resolution for processing
-- **max_pixels**: 100352 - Maximum image resolution for processing  
+- **max_pixels**: 100352 - Maximum image resolution for processing
 - **use_custom_prompt**: false - Use default prompting strategy
 - **fps**: 1 - Frame rate for video processing (RoboVQA only)
 
@@ -177,6 +178,7 @@ python vlmeval/run.py \
 ### Expected Output
 
 The evaluation will generate:
+
 - **Detailed logs** for each benchmark
 - **Per-question results** with model predictions
 - **Overall accuracy scores** for each benchmark

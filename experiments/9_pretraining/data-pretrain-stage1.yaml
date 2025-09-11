@@ -4,7 +4,7 @@ mm_datasets:
   - json_path: LLaVA-Instruct-150K/llava_v1_5_mix665k_processed.jsonl
     sampling_strategy: all
     vision_base_path: LLaVA-Instruct-150K/processed
-  
+
   # LLaVA-Instruct-150K
   - json_path: LLaVA-Instruct-150K/llava_instruct_80k.jsonl
     sampling_strategy: all
@@ -21,7 +21,7 @@ mm_datasets:
   - json_path: LLaVA-Instruct-150K/complex_reasoning_77k.jsonl
     sampling_strategy: all
     vision_base_path: LLaVA-Instruct-150K/processed/coco/train2017
-  
+
   # LLaVA-Video-178K
   - json_path: LLaVA-Video-178K/processed/30_60_s_youtube_v0_1_cap_processed.jsonl
     sampling_strategy: all
@@ -137,17 +137,17 @@ mm_datasets:
   - json_path: LLaVA-Video-178K/processed/0_30_s_academic_mc_v0_1_qa_processed.jsonl
     sampling_strategy: all
     vision_base_path: LLaVA-Video-178K
-  
+
   # pixmo-points
   - json_path: pixmo-points/processed/pixmo_points_train.jsonl
     sampling_strategy: all
     vision_base_path: pixmo-points/processed
-  
+
   # RefCOCO
   - json_path: RefCOCO/processed/refcoco_train.jsonl
     sampling_strategy: all
     vision_base_path: RefCOCO/processed
-  
+
   # EO-Dataset
   - json_path: IPEC-COMMUNITY/EO-Data1.5M/Physical_Common_Sense_73K.jsonl
     sampling_strategy: all
@@ -183,7 +183,7 @@ lerobot_datasets:
   - repo_id: droid_1.0.0_lerobot
     root: LEROBOT_DATASET
     select_video_keys: [observation.images.image]
-  
+
   # agibot
   - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_354
     root: DATA
@@ -869,10 +869,10 @@ lerobot_datasets:
     select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
     select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
     select_action_keys: [actions.joint.position, actions.effector.position]
-  
+
   ################## and more ... ##################
-  
-  
+
+
   # robo-mind
   - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/10_packplate
     root: DATA

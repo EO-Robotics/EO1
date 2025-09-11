@@ -1,6 +1,7 @@
 import os
 from collections import deque
-from typing import List, Optional, Sequence
+from typing import List, Optional
+from collections.abc import Sequence
 
 import cv2 as cv
 import matplotlib.pyplot as plt
@@ -18,7 +19,7 @@ class EOInference:
     def __init__(
         self,
         saved_model_path: str = "pretrained/eo-1",
-        unnorm_key: Optional[str] = None,
+        unnorm_key: str | None = None,
         policy_setup: str = "widowx_bridge",
         exec_horizon: int = 4,
         image_size: list[int] = None,
@@ -132,7 +133,7 @@ class EOInference:
         return raw_proprio
 
     def step(
-        self, image: np.ndarray, task_description: Optional[str] = None, *args, **kwargs
+        self, image: np.ndarray, task_description: str | None = None, *args, **kwargs
     ) -> tuple[dict[str, np.ndarray], dict[str, np.ndarray]]:
         """
         Input:
@@ -238,7 +239,7 @@ class EOInference:
         else:
             self.image_history.append(image)
 
-    def _obtain_image_history(self) -> List[Image.Image]:
+    def _obtain_image_history(self) -> list[Image.Image]:
         image_history = list(self.image_history)
         images = image_history[:: self.obs_interval]
         # images = [Image.fromarray(image).convert("RGB") for image in images]
