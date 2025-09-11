@@ -113,7 +113,7 @@ def train():
 
     trainer = OneVisionTrainer(model=model, processing_class=processor, args=training_args, **data_module)
 
-    # compute tokens num for data packing
+    # aggregate data lengths for packing
     if training_args.pack_dataset:
         import numpy as np
 
@@ -125,11 +125,11 @@ def train():
         dataset.cached_lengths = lengths
 
         data_module["train_dataset"]._pack()
-        packed_lengths = data_module["train_dataset"].packed_lengths
+        packed_lens = data_module["train_dataset"].packed_lengths
 
         logger.info(
             f"group length {len(lengths)=}, {min(lengths)=}, {max(lengths)=},",
-            f"packed data {len(packed_lengths)=}, {min(packed_lengths)=}, {max(packed_lengths)=}, {np.mean(packed_lengths)=}",
+            f"packed data {len(packed_lens)=}, {min(packed_lens)=}, {max(packed_lens)=}, {np.mean(packed_lens)=}",
             main_process_only=True,
         )
     else:
@@ -138,7 +138,7 @@ def train():
     if trainer.accelerator.is_main_process:
         dataset.info_qwen_vision_fetch()
         input_ids = dataset[0]["input_ids"]
-        logger.info(f"sample: {processor.tokenizer.decode(input_ids)}")
+        print(f"sample: {processor.tokenizer.decode(input_ids)}")
 
     if list(Path(training_args.output_dir).glob("checkpoint-*")):
         logger.info("resume from checkpoint")

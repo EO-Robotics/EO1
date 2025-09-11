@@ -210,7 +210,6 @@ class EO1VisionFlowMatchingModel(Qwen2_5_VLForConditionalGeneration):
         states: torch.Tensor | None = None,
         actions: torch.Tensor | None = None,
         action_is_pad: torch.Tensor | None = None,
-        packed_position_ids: list[torch.Tensor] | None = None,
     ) -> tuple | EO1VisionFlowMatchingOutputWithPast:
         output_attentions = (
             output_attentions if output_attentions is not None else self.config.output_attentions
@@ -399,12 +398,13 @@ class EO1VisionFlowMatchingModel(Qwen2_5_VLForConditionalGeneration):
         return_dict: bool | None = None,
         cache_position: torch.LongTensor | None = None,
     ) -> Tensor:
-        """Sample actions from the model, break down into 3 steps to make a unified generation interface:
-            1. pass the mm prefix to the model, and update kvcache
-            2. perform denoising loop, with noise q and mm kv
-        Args:
-            input_ids: The input ids, <text>...<task><bost><state><eost> <boa> <action>...<action> <eoa>
-            attention_mask: The attention mask.
+        """Sample actions from the model, break down into 2 steps to make a unified generation interface:
+        1. pass the mm prefix to the model, and update kvcache
+        2. perform denoising steps, with noise q and mm kvcache
+        input_ids:
+        <|im_start|>user<|vision_start|><|image_pad|>...<|vision_end|><|state_start|><|state_pad|><|state_end|>task...<|vla|><|im_end|> -> AR kvcache
+        <|im_start|>assistant<|action_start|><|action_pad|>...<|action_end|> -> FM denoising
+        <|im_end|> -> AR
         """
         chunksz_eoa = self.config.action_chunk_size + 1
         mm_outputs = self.model(

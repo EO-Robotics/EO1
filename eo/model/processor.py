@@ -179,7 +179,6 @@ class OneVisionProcessor(ProcessorMixin):
                         the length of video_grid_thw ({len(video_grid_thw)}) or fps should be a single number."
                 )
             videos_inputs.update({"second_per_grid_ts": second_per_grid_ts})
-
         else:
             videos_inputs = {}
             video_grid_thw = None

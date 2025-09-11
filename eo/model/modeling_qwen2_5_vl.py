@@ -25,9 +25,9 @@
 # limitations under the License.
 
 import math
+from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any, Optional, Union
-from collections.abc import Callable
 
 import torch
 import torch.nn as nn
@@ -778,9 +778,8 @@ class Qwen2_5_VLAttention(nn.Module):
         output_attentions: bool = False,
         use_cache: bool = False,
         cache_position: torch.LongTensor | None = None,
-        position_embeddings: None | (
-            tuple[torch.Tensor, torch.Tensor]
-        ) = None,  # necessary, but kept here for BC
+        position_embeddings: None
+        | (tuple[torch.Tensor, torch.Tensor]) = None,  # necessary, but kept here for BC
         **kwargs: Unpack[FlashAttentionKwargs],
     ) -> tuple[torch.Tensor, torch.Tensor | None, tuple[torch.Tensor] | None]:
         bsz, q_len, _ = hidden_states.size()
@@ -857,9 +856,8 @@ class Qwen2_5_VLDecoderLayer(GradientCheckpointingLayer):
         output_attentions: bool | None = False,
         use_cache: bool | None = False,
         cache_position: torch.LongTensor | None = None,
-        position_embeddings: None | (
-            tuple[torch.Tensor, torch.Tensor]
-        ) = None,  # necessary, but kept here for BC
+        position_embeddings: None
+        | (tuple[torch.Tensor, torch.Tensor]) = None,  # necessary, but kept here for BC
         **kwargs: Unpack[FlashAttentionKwargs],
     ) -> tuple[torch.FloatTensor, tuple[torch.FloatTensor, torch.FloatTensor] | None]:
         """

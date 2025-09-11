@@ -82,7 +82,7 @@ pip install --upgrade setuptools
 # install flash-attn 2
 MAX_JOBS=4 pip install flash-attn==2.8.3 --no-build-isolation
 
-# or install from source for H100 / H800 GPU, CUDA 12.8 for best performance
+# [recommended] install from source with H100 / H800 GPU, CUDA 12.8 for best performance
 # git clone https://github.com/Dao-AILab/flash-attn.git -b v2.8.3 --recursive --depth 1
 # cd hopper && python setup.py install
 
@@ -190,7 +190,7 @@ torchrun $TORCH_RUN_ARGS onvisfm/train.py \
   --dataloader-num-workers 8 \
   --freeze-vision-tower False \
   --freeze-llm False \
-  --tune-merger True \
+  --freeze-merger False \
   --bf16 True \
   --tf32 True \
   --num-train-epochs 25 \
@@ -203,9 +203,27 @@ torchrun $TORCH_RUN_ARGS onvisfm/train.py \
   --save-steps 2000 \
   --report-to wandb \
   --run-name bridge \
-  --state-mode MAEN_STD \
-  --output-base eo-1
+  --state-mode MAEN_STD
 ```
+
+## More Examples
+
+### Getting Started Tutorials
+- [Load Dataset and Customization](getting_started/1_load_dataset.ipynb) - Learn how to load and customize datasets in LeRobot format
+- [Fine-tuning on Custom Data](getting_started/2_train_finetune.ipynb) - Step-by-step guide for training EO-1 on your own data
+- [Evaluation and Deployment](getting_started/3_eval_deploy.ipynb) - Deploy trained models and run evaluations
+- [Advanced Pre-training](getting_started/4_advanced_pretrain.ipynb) - Large-scale pre-training workflows
+
+### Experiment Examples
+- [Demo Training](experiments/1_demo/) - Quick start with demo data and debug mode
+- [Libero Benchmark](experiments/2_libero/) - Spatial reasoning tasks and evaluation
+- [SimplerEnv Benchmark](experiments/3_simpler/) - Real-world deployment on WidowX and Google Robot
+- [SO101 Tasks](experiments/4_so101/) - SO100 collection manipulation tasks
+- [WidowX Platform](experiments/5_widowx/) - WidowX robot specific training and evaluation
+- [AgiBot Platform](experiments/6_agibot/) - AgiBot robot training and deployment
+- [Franka Platform](experiments/7_franka/) - Franka robot manipulation tasks
+- [Vision-Language Evaluation](experiments/8_vllmeval/) - Multi-modal benchmark evaluation
+- [Large-scale Pre-training](experiments/9_pretraining/) - Multi-stage pre-training with 128+ GPUs
 
 ## Benchmark
 
@@ -254,8 +272,8 @@ We welcome contributions! Please check out CONTRIBUTING.md. Join our community o
 If you find this project useful, please consider citing:
 
 ```bibtex
-@article{eo-1,
-  title={EmbodiedOneVision: Interleaved Vision-Text-Action Pretraining for General Robot Control},
+@article{eo1,
+  title={EO-1: Interleaved Vision-Text-Action Pretraining for General Robot Control},
   author={Delin Qu and Haoming Song and Qizhi Chen and Zhaoqing Chen and Xianqiang Gao and Xinyi Ye and Qi Lv and Modi Shi and Guanghui Ren and Cheng Ruan and Maoqing Yao and Haoran Yang and Jiacheng Bao and Bin Zhao and Dong Wang},
   journal={arXiv preprint},
   year={2025},

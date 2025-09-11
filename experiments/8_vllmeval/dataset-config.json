@@ -1,0 +1,32 @@
+{
+    "model": {
+        "EO1-3B": {
+            "class": "EO1VisionFlowMatchingChat",
+            "min_pixels": 50176,
+            "max_pixels": 100352,
+            "use_custom_prompt": false,
+            "model_path": "IPEC-COMMUNITY/EO-1-3B"
+        }
+    },
+    "data": {
+        "EOBench": {
+            "class": "EOBench",
+            "dataset": "EOBench",
+            "data_file": "IPEC-COMMUNITY/EO-Bench/benchmark_v1.jsonl",
+            "data_root": "IPEC-COMMUNITY/EO-Bench"
+        },
+        "ERQABench": {
+            "class": "ERQABench",
+            "dataset": "ERQABench",
+            "data_root": "IPEC-COMMUNITY/ERQABench",
+            "data_file": "IPEC-COMMUNITY/ERQABench/benchmark_v1.jsonl"
+        },
+        "RoboVQA": {
+            "class": "RoboVQA",
+            "dataset": "RoboVQA",
+            "data_root": "IPEC-COMMUNITY/RoboVQA",
+            "data_file": "IPEC-COMMUNITY/RoboVQA/benchmark_v1.jsonl",
+            "fps": 1
+        }
+    }
+}

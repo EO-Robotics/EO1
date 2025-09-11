@@ -225,9 +225,10 @@ source
 .DS_Store
 
 experiments/outputs
-experiments/demo_data
-getting_started/demo_data
-demo_data
 scripts/env.sh
 scripts/pre-commit.sh
 tools/caption_video.html
+
+experiments/2_libero/logs
+experiments/2_libero/logs/videos
+demo_data/demos25

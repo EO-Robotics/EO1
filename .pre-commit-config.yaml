@@ -41,7 +41,7 @@ repos:
     hooks:
       - id: ruff-format
         types_or: [ python, pyi ]
-        exclude: ^eo/model/modeling_qwen2_5_vl\.py$
+        exclude: ^eo/model/modeling_qwen2_5_vl\.py|$^experiments/3_simpler/eo/$|$^experiments/8_vllmeval/$
       - id: ruff
         types_or: [ python, pyi ]
         args: [--fix, --exit-non-zero-on-fix]

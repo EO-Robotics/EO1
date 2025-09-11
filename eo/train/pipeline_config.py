@@ -36,11 +36,11 @@ class TrainPipelineConfig(TrainingArguments):
     """dataset parameters"""
     data_path: str = field(default=None, metadata={"help": "Path to training data or yaml config."})
     train_mm_only: bool = False
-    train_lerobot_only: bool = False
+    train_lerobot_only: bool = True
     lerobot_data_video_backend: str | None = "torchcodec"
     state_mode: NormalizationMode | None = NormalizationMode.MEAN_STD
     pack_dataset: bool = False
-    max_seq_length: int = field(default=768, metadata={"help": "Maximum sequence length."})
+    max_packed_length: int = field(default=768, metadata={"help": "Maximum sequence length."})
     mini_action_set_length: int = field(
         default=256, metadata={"help": "Maximum length of mini action set data in dataset packing."}
     )
@@ -89,12 +89,6 @@ class TrainPipelineConfig(TrainingArguments):
         super().__post_init__()
 
         """check validity"""
-        if not self.data_path.endswith(".yaml"):
-            self.train_lerobot_only = True
-            warnings.warn(
-                "`train_lerobot_only` is set to True when `data_path` is lerobot data.", stacklevel=2
-            )
-
         if self.train_lerobot_only and self.train_mm_only:
             self.train_mm_only = False
             warnings.warn("`train_mm_only` is set to False when `train_lerobot_only` is True.", stacklevel=2)

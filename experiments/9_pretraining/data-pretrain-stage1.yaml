@@ -1,0 +1,2150 @@
+# pretraining example dataset config
+mm_datasets:
+  # LLaVA-Instruct-665K
+  - json_path: LLaVA-Instruct-150K/llava_v1_5_mix665k_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Instruct-150K/processed
+  
+  # LLaVA-Instruct-150K
+  - json_path: LLaVA-Instruct-150K/llava_instruct_80k.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Instruct-150K/processed/coco/train2017
+  - json_path: LLaVA-Instruct-150K/llava_instruct_150k.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Instruct-150K/processed/coco/train2017
+  - json_path: LLaVA-Instruct-150K/detail_23k.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Instruct-150K/processed/coco/train2017
+  - json_path: LLaVA-Instruct-150K/conversation_58k.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Instruct-150K/processed/coco/train2017
+  - json_path: LLaVA-Instruct-150K/complex_reasoning_77k.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Instruct-150K/processed/coco/train2017
+  
+  # LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/30_60_s_youtube_v0_1_cap_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/30_60_s_youtube_oe_v0_1_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/30_60_s_youtube_mc_v0_1_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/30_60_s_perceptiontest_mc_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/30_60_s_nextqa_oe_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/30_60_s_nextqa_mc_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/30_60_s_activitynetqa_oe_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/30_60_s_academic_v0_1_cap_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/30_60_s_academic_oe_v0_1_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/30_60_s_academic_mc_v0_1_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/2_3_m_youtube_v0_1_cap_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/2_3_m_youtube_oe_v0_1_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/2_3_m_youtube_mc_v0_1_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/2_3_m_nextqa_oe_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/2_3_m_nextqa_mc_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/2_3_m_activitynetqa_oe_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/2_3_m_academic_v0_1_cap_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/2_3_m_academic_oe_v0_1_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/2_3_m_academic_mc_v0_1_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/1_2_m_youtube_v0_1_cap_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/1_2_m_youtube_oe_v0_1_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/1_2_m_youtube_mc_v0_1_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/1_2_m_nextqa_oe_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/1_2_m_nextqa_mc_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/1_2_m_activitynetqa_oe_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/1_2_m_academic_v0_1_cap_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/1_2_m_academic_oe_v0_1_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/1_2_m_academic_mc_v0_1_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/0_30_s_youtube_v0_1_cap_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/0_30_s_youtube_oe_v0_1_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/0_30_s_youtube_mc_v0_1_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/0_30_s_perceptiontest_mc_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/0_30_s_nextqa_oe_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/0_30_s_nextqa_mc_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/0_30_s_activitynetqa_oe_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/0_30_s_academic_v0_1_cap_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/0_30_s_academic_oe_v0_1_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  - json_path: LLaVA-Video-178K/processed/0_30_s_academic_mc_v0_1_qa_processed.jsonl
+    sampling_strategy: all
+    vision_base_path: LLaVA-Video-178K
+  
+  # pixmo-points
+  - json_path: pixmo-points/processed/pixmo_points_train.jsonl
+    sampling_strategy: all
+    vision_base_path: pixmo-points/processed
+  
+  # RefCOCO
+  - json_path: RefCOCO/processed/refcoco_train.jsonl
+    sampling_strategy: all
+    vision_base_path: RefCOCO/processed
+  
+  # EO-Dataset
+  - json_path: IPEC-COMMUNITY/EO-Data1.5M/Physical_Common_Sense_73K.jsonl
+    sampling_strategy: all
+    vision_base_path: IPEC-COMMUNITY/EO-Data1.5M
+  - json_path: IPEC-COMMUNITY/EO-Data1.5M/Spatial_Understanding_376K.jsonl
+    sampling_strategy: all
+    vision_base_path: IPEC-COMMUNITY/EO-Data1.5M
+  - json_path: IPEC-COMMUNITY/EO-Data1.5M/Task_Reasoning_731K.jsonl
+    sampling_strategy: all
+    vision_base_path: IPEC-COMMUNITY/EO-Data1.5M
+  - json_path: IPEC-COMMUNITY/EO-Data1.5M/Robot_Control_122K.jsonl
+    sampling_strategy: all
+    vision_base_path: IPEC-COMMUNITY/EO-Data1.5M
+
+  # FineVision
+  - json_path: HuggingFaceM4/FineVision/processed/finevision_train.jsonl
+    sampling_strategy: all
+    vision_base_path: HuggingFaceM4/FineVision/processed
+
+  # RoboVQA
+  - json_path: DATA/robovqa_raw/processed_data/train/train.jsonl
+    sampling_strategy: all
+    vision_base_path: DATA/robovqa_raw/processed_data/train
+
+lerobot_datasets:
+  # openx
+  - repo_id: bridge_orig_1.0.0_lerobot
+    root: LEROBOT_DATASET
+    select_video_keys: [observation.images.image_0]
+  - repo_id: fractal20220817_data_0.1.0_lerobot
+    root: LEROBOT_DATASET
+    select_video_keys: [observation.images.image]
+  - repo_id: droid_1.0.0_lerobot
+    root: LEROBOT_DATASET
+    select_video_keys: [observation.images.image]
+  
+  # agibot
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_354
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_356
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_359
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_360
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_361
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_362
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_365
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_366
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_372
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_385
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_388
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_389
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_390
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_398
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_422
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_504
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_505
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_506
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_532
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_543
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_566
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_567
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_568
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_584
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_597
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_602
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_609
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_725
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_741
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_744
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_748
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_765
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_779
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_327
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_351
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_352
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_357
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_358
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_363
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_367
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_368
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_369
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_373
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_374
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_375
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_376
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_377
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_378
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_380
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_384
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_392
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_410
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_414
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_421
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_424
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_425
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_428
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_429
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_431
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_433
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_434
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_438
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_440
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_444
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_445
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_446
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_451
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_452
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_453
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_454
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_455
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_460
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_462
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_463
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_464
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_465
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_466
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_468
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_470
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_471
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_474
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_477
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_478
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_480
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_483
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_485
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_486
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_487
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_491
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_492
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_494
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_497
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_498
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_501
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_503
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_507
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_508
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_509
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_510
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_511
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_512
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_515
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_520
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_521
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_522
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_524
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_525
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_527
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_528
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_529
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_533
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_534
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_535
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  - repo_id: AgiBotWorld-Beta-Franka-LeRobot/task_537
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    select_state_keys: [observation.states.head.position, observation.states.waist.position, observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: [actions.joint.position, actions.effector.position]
+  
+  ################## and more ... ##################
+  
+  
+  # robo-mind
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/10_packplate
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/10_packplate_2
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/11_brushcup
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/11_brushcup_2
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/12_packcup
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/13_packbowl
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/14_steamcorn
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/15_steamegg
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/15_steamegg_2
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/16_steampotato
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/16_steampotato_2
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/17_packtable
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/18_makebread
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/18_makebread_2
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/19_takebread
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/19_takebread_2
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/1_potatooven
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/1_potatooven_2
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/20_takecorn
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/20_takecorn_2
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/21_takeegg
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/22_takepotato
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/26_cleanplate
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/27_carrotgreenplate
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/28_packtable_2
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/29_steampumpkin
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/2_cornoven
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/30_takepumpkin
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/31_unpackbowl
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/32_unpackcup
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/35_putcarrot
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/36_putpepper
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/37_putegg
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/38_putcorn
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/39_puttomato
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/3_eggplantOven
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/3_eggplantoven_2
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/40_putavocado
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/41_putplum
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/42_putkiwifruite
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/43_packplate
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/44_putbluebowlongreenplate
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/45_putgreenbowlonblueplate
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/46_putredbowlonwhiteplate
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/48_putpotatogreenplatefromsteam_2
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/4_potatobowloven_2
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/50_pourtea
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/51_breadoven
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/52_holdercup
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/53_stackcup
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/54_placecup
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/55_pumpkinbowloven
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/56_placeplate
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/57_potatolittleoven
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/58_pumpkinlittleoven
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/59_steamedbreadlittleoven
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/5_eggoven_2
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/6_applebowloven_2
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/7_applegreenplate_2
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/8_appleblueplate_2
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/agilex_3rgb/9_appleyellowplate_2
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/franka_1rgb/bread_in_basket
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/franka_1rgb/bread_on_table
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/bread_in_basket_1
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/bread_in_basket_old
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/bread_on_table
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/close_top_drawer
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/close_top_white_drawer
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/close_trash_can
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/cover_pot_lid
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/green_pepper_in_basket
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/green_pepper_in_basket_1
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/green_pepper_on_table
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/open_pot_lid
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/open_top_drawer
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/open_top_white_drawer
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/open_trash_can
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/pick_up_banana
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/pick_up_bread
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/pick_up_bread_slice
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/pick_up_can
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/pick_up_donut
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/pick_up_egg
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/pick_up_green_onion
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/pick_up_green_pepper
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/pick_up_long_bread
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/pick_up_mangosteen
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/pick_up_paper_ball
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/pick_up_pear
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/pick_up_plastic_bottle
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/pick_up_pot_lid
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/pick_up_red_pepper
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/pick_up_round_bread
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/pick_up_round_bread_1
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/pick_up_square_bread
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/pick_up_toast
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/pick_up_triangle_bread
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/pick_up_yellow_pepper
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_banana_in_top_drawer
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_bread_in_pot
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_bread_slice_in_pot
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_bread_slice_in_top_white_drawer
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_can_in_trash_can
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_donut_in_pot
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_donut_in_top_white_drawer
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_egg_in_pot
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_egg_in_top_white_drawer
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_green_onion_in_pot
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_green_pepper_in_pot
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_green_pepper_in_top_white_drawer
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_long_bread_in_pot
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_long_bread_in_top_white_drawer
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_long_bread_in_trash_can
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_mangosteen_in_top_white_drawer
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_paper_ball_in_trash_can
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_pear_in_top_white_drawer
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_plastic_bottle_in_trash_can
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_pot_lid_on_table
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_red_pepper_in_pot
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_red_pepper_in_top_white_drawer
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_round_bread_in_pot
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_round_bread_in_top_white_drawer
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_round_bread_in_trash_can
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_square_bread_in_top_white_drawer
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_square_bread_in_trash_can
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_toast_in_pot
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_toast_in_top_white_drawer
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_triangle_bread_in_pot
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_triangle_bread_in_top_white_drawer
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_yellow_pepper_in_pot
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_yellow_pepper_in_top_drawer
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/put_yellow_pepper_in_top_white_drawer
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/red_pepper_in_basket
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/red_pepper_on_table
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/triangle_bread_on_table
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/yellow_pepper_in_basket
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/yellow_pepper_in_basket_1
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_0_release/ur_1rgb/yellow_pepper_on_table
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_top]
+    select_state_keys: [observation.states.joint_position]
+    select_action_keys: [actions.joint_position]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_1_release/agilex_3rgb/20_takecorn_2
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_1_release/agilex_3rgb/28_packtable_2
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_1_release/agilex_3rgb/39_puttomato
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_1_release/agilex_3rgb/40_putavocado
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_1_release/agilex_3rgb/41_putplum
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_1_release/agilex_3rgb/42_putkiwifruite
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_1_release/agilex_3rgb/43_packplate
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_1_release/agilex_3rgb/44_putbluebowlongreenplate
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_1_release/agilex_3rgb/5_eggoven_2
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+  - repo_id: RoboMIND-Train-LeRobot/benchmark1_1_release/agilex_3rgb/6_applebowloven_2
+    root: DATA
+    train_subtask: true
+    select_video_keys: [observation.images.camera_front, observation.images.camera_left_wrist, observation.images.camera_right_wrist]
+    select_state_keys: [observation.states.joint_position_left, observation.states.joint_position_right]
+    select_action_keys: [actions.joint_position_left, actions.joint_position_right]
+
+  # SO100
+  - repo_id: SO100-Community/aimihat/so100_tape
+    root: DATA
+    select_video_keys: [observation.images.phone, observation.images.laptop]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/bnarin/so100_tic_tac_toe_move_0_0
+    root: DATA
+    select_video_keys: [observation.images.phone, observation.images.laptop]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/bnarin/so100_tic_tac_toe_move_1_0
+    root: DATA
+    select_video_keys: [observation.images.phone, observation.images.laptop]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/bnarin/so100_tic_tac_toe_move_2_1
+    root: DATA
+    select_video_keys: [observation.images.phone, observation.images.laptop]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/bnarin/so100_tic_tac_toe_move_4_0
+    root: DATA
+    select_video_keys: [observation.images.phone, observation.images.laptop]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/bnarin/so100_tic_tac_toe_we_do_it_live
+    root: DATA
+    select_video_keys: [observation.images.phone, observation.images.laptop]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/danielkr452/so100_work6
+    root: DATA
+    select_video_keys: [observation.images.phone]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/danaaubakirova/so100_task_1
+    root: DATA
+    select_video_keys: [observation.images.top, observation.images.wrist]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/danaaubakirova/so100_task_2
+    root: DATA
+    select_video_keys: [observation.images.top, observation.images.wrist]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/danaaubakirova/so100_task_3
+    root: DATA
+    select_video_keys: [observation.images.top, observation.images.wrist]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/danaaubakirova/so100_task_4
+    root: DATA
+    select_video_keys: [observation.images.top, observation.images.wrist]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/danaaubakirova/so100_v2_task_1
+    root: DATA
+    select_video_keys: [observation.images.top, observation.images.wrist]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/danaaubakirova/so100_v2_task_2
+    root: DATA
+    select_video_keys: [observation.images.top, observation.images.wrist]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/danaaubakirova/so100_v2_task_3
+    root: DATA
+    select_video_keys: [observation.images.top, observation.images.wrist]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/danaaubakirova/so100_v2_task_4
+    root: DATA
+    select_video_keys: [observation.images.top, observation.images.wrist]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/DimiSch/so100_50ep_2
+    root: DATA
+    select_video_keys: [observation.images.realsense]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/DorayakiLin/so100_pick_charger_on_tissue
+    root: DATA
+    select_video_keys: [observation.images.phone, observation.images.laptop]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/DorayakiLin/so100_pick_cube_in_box
+    root: DATA
+    select_video_keys: [observation.images.phone, observation.images.laptop]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/DorayakiLin/so100_stack_cube
+    root: DATA
+    select_video_keys: [observation.images.phone, observation.images.laptop]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/Ityl/so100_recording1
+    root: DATA
+    select_video_keys: [observation.images.realsense_top, observation.images.realsense_side]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/Ityl/so100_recording2
+    root: DATA
+    select_video_keys: [observation.images.realsense_top, observation.images.realsense_side]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/jmrog/so100_sweet_pick
+    root: DATA
+    select_video_keys: [observation.images.laptop, observation.images.phone]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/kantine/so100_kapla_tower6
+    root: DATA
+    select_video_keys: [observation.images.logitech_1, observation.images.logitech_2]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/Loki0929/so100_100
+    root: DATA
+    select_video_keys: [observation.images.laptop, observation.images.phone]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/Loki0929/so100_duck
+    root: DATA
+    select_video_keys: [observation.images.top, observation.images.third, observation.images.wrist]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/lucasngoo/so100_strawberry_grape
+    root: DATA
+    select_video_keys: [observation.images.webcam]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/nbaron99/so100_pick_and_place2
+    root: DATA
+    select_video_keys: [observation.images.phone, observation.images.laptop]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/nbaron99/so100_pick_and_place4
+    root: DATA
+    select_video_keys: [observation.images.phone, observation.images.laptop]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/Odog16/so100_cube_drop_pick_v1
+    root: DATA
+    select_video_keys: [observation.images.workspace, observation.images.wrist]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/Odog16/so100_cube_stacking_v1
+    root: DATA
+    select_video_keys: [observation.images.Workspace, observation.images.Wrist]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/Odog16/so100_tea_towel_folding_v1
+    root: DATA
+    select_video_keys: [observation.images.workspace, observation.images.wrist]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/paszea/so100_lego
+    root: DATA
+    select_video_keys: [observation.images.phone, observation.images.laptop]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/paszea/so100_lego_2cam
+    root: DATA
+    select_video_keys: [observation.images.front, observation.images.top]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/paszea/so100_lego_mix
+    root: DATA
+    select_video_keys: [observation.images.phone]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/paszea/so100_whale
+    root: DATA
+    select_video_keys: [observation.images.laptop, observation.images.phone]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/paszea/so100_whale_2
+    root: DATA
+    select_video_keys: [observation.images.laptop, observation.images.phone]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/paszea/so100_whale_3
+    root: DATA
+    select_video_keys: [observation.images.phone, observation.images.laptop]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/paszea/so100_whale_4
+    root: DATA
+    select_video_keys: [observation.images.phone, observation.images.laptop]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/paszea/so100_whale_grab
+    root: DATA
+    select_video_keys: [observation.images.phone, observation.images.laptop]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/samanthalhy/so100_herding_1
+    root: DATA
+    select_video_keys: [observation.images.phone, observation.images.laptop]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/SeanLMH/so100_picknplace
+    root: DATA
+    select_video_keys: [observation.images.overhead, observation.images.front]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/SeanLMH/so100_picknplace_v2
+    root: DATA
+    select_video_keys: [observation.images.overhead, observation.images.front]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/Setchii/so100_grab_ball
+    root: DATA
+    select_video_keys: [observation.images.phone, observation.images.laptop]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/shreyasgite/so100_base_env
+    root: DATA
+    select_video_keys: [observation.images.laptop, observation.images.phone]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/shreyasgite/so100_legocube_50
+    root: DATA
+    select_video_keys: [observation.images.laptop, observation.images.phone]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/sshh11/so100_orange_50ep_1
+    root: DATA
+    select_video_keys: [observation.images.laptop]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/sshh11/so100_orange_50ep_2
+    root: DATA
+    select_video_keys: [observation.images.laptop]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/vladfatu/so100_above
+    root: DATA
+    select_video_keys: [observation.images.phone, observation.images.laptop]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/vladfatu/so100_ds
+    root: DATA
+    select_video_keys: [observation.images.laptop, observation.images.phone]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/vladfatu/so100_office
+    root: DATA
+    select_video_keys: [observation.images.phone, observation.images.laptop]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/VoicAndrei/so100_banana_to_plate_only
+    root: DATA
+    select_video_keys: [observation.images.top, observation.images.right]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/yuz1wan/so100_button
+    root: DATA
+    select_video_keys: [observation.images.side, observation.images.wrist]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/yuz1wan/so100_fold_0227_1
+    root: DATA
+    select_video_keys: [observation.images.side]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/yuz1wan/so100_fold_0227_2
+    root: DATA
+    select_video_keys: [observation.images.side, observation.images.wrist]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/yuz1wan/so100_pick_pink
+    root: DATA
+    select_video_keys: [observation.images.side, observation.images.wrist]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/yuz1wan/so100_pickplace
+    root: DATA
+    select_video_keys: [observation.images.side, observation.images.wrist]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/yuz1wan/so100_pickplace_0223_2
+    root: DATA
+    select_video_keys: [observation.images.side]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/yuz1wan/so100_pickplace_0223_3
+    root: DATA
+    select_video_keys: [observation.images.side]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/yuz1wan/so100_pick_wahaha
+    root: DATA
+    select_video_keys: [observation.images.side, observation.images.wrist]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/yuz1wan/so100_pour_cup
+    root: DATA
+    select_video_keys: [observation.images.side, observation.images.wrist]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/yuz1wan/so100_pp_pink
+    root: DATA
+    select_video_keys: [observation.images.side, observation.images.wrist]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/zaringleb/so100_cube_2
+    root: DATA
+    select_video_keys: [observation.images.cam_high]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/zaringleb/so100_cube_4_binary
+    root: DATA
+    select_video_keys: [observation.images.cam_high]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/zaringleb/so100_cube_5_linear
+    root: DATA
+    select_video_keys: [observation.images.cam_high]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/zaringleb/so100_cube_6_2d
+    root: DATA
+    select_video_keys: [observation.images.cam_high]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/zaringleb/so100_cude_linear_and_2d_comb
+    root: DATA
+    select_video_keys: [observation.images.cam_high]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/ZGGZZG/so100_drop0
+    root: DATA
+    select_video_keys: [observation.images.up, observation.images.left]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: SO100-Community/ZGGZZG/so100_drop1
+    root: DATA
+    select_video_keys: [observation.images.up, observation.images.left]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+
+  # IPEC-Franka
+  - repo_id: IPEC-Franka/ipec_franka_cube_rgb_blue_raw_2_cam_0.1.0_lerobot
+    root: LEROBOT_DATASET
+    train_subtask: true
+    select_video_keys: [observation.images.third_camera_rgb_image, observation.images.ego_camera_rgb_image]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: IPEC-Franka/ipec_franka_cube_rgb_green_raw_2_cam_0.1.0_lerobot
+    root: LEROBOT_DATASET
+    train_subtask: true
+    select_video_keys: [observation.images.third_camera_rgb_image, observation.images.ego_camera_rgb_image]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: IPEC-Franka/ipec_franka_cube_rgb_red_raw_2_cam_0.1.0_lerobot
+    root: LEROBOT_DATASET
+    train_subtask: true
+    select_video_keys: [observation.images.third_camera_rgb_image, observation.images.ego_camera_rgb_image]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: IPEC-Franka/ipec_franka_kitchen_banana_raw_2_cam_0.1.0_lerobot
+    root: LEROBOT_DATASET
+    train_subtask: true
+    select_video_keys: [observation.images.third_camera_rgb_image, observation.images.ego_camera_rgb_image]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: IPEC-Franka/ipec_franka_kitchen_pot_raw_2_cam_0.1.0_lerobot
+    root: LEROBOT_DATASET
+    train_subtask: true
+    select_video_keys: [observation.images.third_camera_rgb_image, observation.images.ego_camera_rgb_image]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: IPEC-Franka/ipec_franka_plush_toy_raw_2_cam_0.1.0_lerobot
+    root: LEROBOT_DATASET
+    train_subtask: true
+    select_video_keys: [observation.images.third_camera_rgb_image, observation.images.ego_camera_rgb_image]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+  - repo_id: IPEC-Franka/make_tea_rebuttal_0.1.0_lerobot
+    root: LEROBOT_DATASET
+    train_subtask: true
+    select_video_keys: [observation.images.third_camera_rgb_image, observation.images.ego_camera_rgb_image]
+    select_state_keys: [observation.state]
+    select_action_keys: [action]

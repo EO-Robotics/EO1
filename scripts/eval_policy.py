@@ -44,8 +44,6 @@ def eval_policy():
     ov_output = processor.select_action(
         model,
         batch,
-        # time_horizon=10,
-        # action_dim=32
     )
 
     print(ov_output)

@@ -1,12 +1,13 @@
 DEBUG=true
 if [ "$DEBUG" = true ]; then
-  GPUS=1
+  GPUS=2
   report=none
   data_num_workers=0
   save_steps=200
   logging_steps=1
   PER_DEVICE_BATCH_SIZE=64
-  ACCELERATE_ARGS="--num_machines 1 --num_processes 1 --dynamo_backend=no"
+  # ACCELERATE_ARGS="--num_machines 1 --num_processes 1 --dynamo_backend=no"
+  ACCELERATE_ARGS="--num_machines 1 --num_processes 2 --dynamo_backend=no --multi_gpu"
 fi
 
 # distributed settings
@@ -24,7 +25,7 @@ ACCELERATE_ARGS=${ACCELERATE_ARGS:-"--main_process_ip=\$MASTER_ADDR --main_proce
   --mixed_precision=bf16 --dynamo_backend=no"}
 
 # * datasets
-dataset=experiments/1_demo/demo_data.yaml
+dataset=experiments/1_demo/data-demo.yaml
 dataset_name=$(basename ${dataset%.*})
 
 # hparams
@@ -34,7 +35,7 @@ vlr=2e-5
 
 chunk_size=16
 epoch=50
-lerobot_only=False
+lerobot_only=True
 
 # fine-tuning
 resume_path=
@@ -42,8 +43,6 @@ model_name_or_path=
 run_name=${dataset_name}_ck${chunk_size}_gpu${GPUS}_lr${lr}_vlr${vlr}_mlr${mlr}_bs${PER_DEVICE_BATCH_SIZE}
 echo $run_name
 
-cd $(pwd)
-export HF_LEROBOT_HOME=${HF_LEROBOT_HOME}
 . scripts/env.sh
 conda activate eo
 
@@ -79,5 +78,4 @@ accelerate launch $ACCELERATE_ARGS scripts/train.py \
     --save-total-limit 3 \
     --report-to ${report} \
     --run-name ${run_name} \
-    --attn-implementation flash_attention_2 \
-    --pack-dataset False
+    --attn-implementation flash_attention_2

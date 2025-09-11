@@ -66,6 +66,8 @@ class MultimodaLeRobotDataset(Dataset):
         lerobot_dataset = []
         if args.data_path.endswith(".yaml"):
             data_configs = DataConfig.from_yaml(args.data_path)
+            if args.train_lerobot_only:
+                data_configs.mm_datasets = []
         else:
             data_configs = DataConfig(
                 lerobot_datasets=[LerobotConfig(repo_id=args.data_path)],
@@ -86,7 +88,7 @@ class MultimodaLeRobotDataset(Dataset):
         if len(data_configs.mm_datasets) > 0:
             mm_dataset = MultimodaDataset(
                 data_configs=data_configs.mm_datasets,
-                max_seq_length=args.max_seq_length,
+                max_packed_length=args.max_packed_length,
                 max_action_dim=args.max_action_dim,
                 meta_dataset=lerobot_dataset,
                 chunk_size=args.chunk_size,
@@ -107,9 +109,6 @@ class MultimodaLeRobotDataset(Dataset):
         self.video_resized_w = args.video_resized_width
         self.video_resized_h = args.video_resized_height
         self.vision_base_paths = self.mm_dataset.vision_base_paths if mm_dataset else None
-
-        # set to false during group-by-length
-        self.sample_actions = True
 
     @property
     def lengths(self):
@@ -602,7 +601,7 @@ def make_supervised_data_module(processor, args: TrainPipelineConfig):
     """build datasets and collator"""
     dataset = MultimodaLeRobotDataset(args=args, processor=processor)
     if args.pack_dataset:
-        dataset = PackedDataset(dataset, args.max_seq_length, args.mini_action_set_length)
+        dataset = PackedDataset(dataset, args.max_packed_length, args.mini_action_set_length)
         data_collator = MultimodaPackedDataCollator()
     else:
         data_collator = MultimodaDataCollator(pad_token_id=processor.tokenizer.pad_token_id)
