@@ -223,3 +223,12 @@ HF_README.md
 source
 
 .DS_Store
+
+experiments/outputs
+scripts/env.sh
+scripts/pre-commit.sh
+tools/caption_video.html
+
+experiments/2_libero/logs
+experiments/2_libero/logs/videos
+demo_data/demos25

@@ -1,0 +1,152 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project.urls]
+homepage = "https://eo-robotics.ai"
+documentation = "https://github.com/EO-Robotics/EO-1/getting_started"
+source = "https://github.com/EO-Robotics/EO-1"
+issues = "https://github.com/EO-Robotics/EO-1/issues"
+discord = "https://discord.com/invite/JqfDs6va"
+
+[project]
+name = "eo"
+version = "0.1.0"
+description = "EO: Open-source Unified Embodied Foundation Model Series"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.10"
+authors = [
+    { name = "Delin Qu", email = "delinqu.cs@gmail.com" },
+    { name = "Dong Wang", email = "wangdong@pjlab.org.cn" },
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+keywords = ["eo", "eo-1", "eo-robotics", "generalist policy", "robotics",  "machine learning", "artificial intelligence"]
+
+dependencies = [
+    # Hugging Face dependencies
+    "datasets>=2.19.0,<=3.6.0",
+    "huggingface-hub[hf-transfer,cli]>=0.34.2",
+    "lerobot>=0.3.3",
+
+    # Core dependencies
+    "cmake>=3.29.0.1",
+    "einops>=0.8.0",
+    "opencv-python-headless>=4.9.0",
+    "av>=14.2.0",
+    "jsonlines>=4.0.0",
+    "packaging>=24.2",
+    "pynput>=1.7.7",
+    "pyserial>=3.5",
+    "wandb>=0.20.0",
+
+    "torch==2.7.0",
+    "torchcodec>=0.2.1; sys_platform != 'win32' and (sys_platform != 'linux' or (platform_machine != 'aarch64' and platform_machine != 'arm64' and platform_machine != 'armv7l')) and (sys_platform != 'darwin' or platform_machine != 'x86_64')",
+    "torchvision>=0.21.0",
+
+    # Binpacking dependency
+    "binpacking>=1.5.0",
+]
+# Optional dependencies
+[project.optional-dependencies]
+
+# Development
+test = ["pytest>=8.1.0", "pytest-timeout>=2.4.0", "pytest-cov>=5.0.0", "mock-serial>=0.0.1 ; sys_platform != 'win32'"]
+
+# All
+all = [
+    "eo[test]"
+]
+
+# ---------------- Tool Configurations ----------------
+[tool.setuptools.packages.find]
+exclude = [
+    "*.tests",
+    "*.tests.*",
+    "tests.*",
+    "tests",
+    "getting_started*",
+    "scripts*",
+    "*checkpoints*",
+    "outputs*",
+    "assets*",
+]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 110
+exclude = ["tests/artifacts/**/*.safetensors", "*_pb2.py", "*_pb2_grpc.py", "assets/*", "eo/qwen2_5_vl/*"]
+
+[tool.ruff.lint]
+# E, W: pycodestyle errors and warnings
+# F: PyFlakes
+# I: isort
+# UP: pyupgrade
+# B: flake8-bugbear (good practices, potential bugs)
+# C4: flake8-comprehensions (more concise comprehensions)
+# A: flake8-builtins (shadowing builtins)
+# SIM: flake8-simplify
+# RUF: Ruff-specific rules
+# D: pydocstyle (for docstring style/formatting)
+# S: flake8-bandit (some security checks, complements Bandit)
+# T20: flake8-print (discourage print statements in production code)
+# N: pep8-naming
+# TODO: Uncomment rules when ready to use
+select = [
+    "E", "W", "F", "I", "B", "C4", "T20", "N" # "SIM", "A", "S", "D", "RUF", "UP"
+]
+ignore = [
+    "E501", # Line too long
+    "T201", # Print statement found
+    "T203", # Pprint statement found
+    "B008", # Perform function call in argument defaults
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401", "F403"]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+known-first-party = ["eo"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = true
+
+[tool.bandit]
+exclude_dirs = [
+    "tests",
+    "experinments",
+    "tools",
+]
+skips = ["B101", "B311", "B404", "B603", "B615"]
+
+[tool.typos]
+default.extend-ignore-re = [
+    "(?Rm)^.*(#|//)\\s*spellchecker:disable-line$",                      # spellchecker:disable-line
+    "(?s)(#|//)\\s*spellchecker:off.*?\\n\\s*(#|//)\\s*spellchecker:on", # spellchecker:<on|off>
+]
+default.extend-ignore-identifiers-re = [
+    # Add individual words here to ignore them
+    "2nd",
+    "pn",
+    "ser",
+    "ein",
+    "thw",
+    "THW",
+]

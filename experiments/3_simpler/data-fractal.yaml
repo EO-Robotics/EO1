@@ -1,0 +1,7 @@
+mm_datasets:
+
+lerobot_datasets:
+
+  - repo_id: fractal20220817_data_lerobot
+    root: HF_LEROBOT_HOME
+    select_video_keys: [observation.images.image]
