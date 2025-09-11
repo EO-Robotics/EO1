@@ -41,18 +41,19 @@ repos:
     hooks:
       - id: ruff-format
         types_or: [ python, pyi ]
-        exclude: ^eo/model/modeling_qwen2_5_vl\.py|$^experiments/3_simpler/eo/$|$^experiments/8_vllmeval/$
+        exclude: ^eo/model/modeling_qwen2_5_vl\.py|^experiments/8_vllmeval/
       - id: ruff
         types_or: [ python, pyi ]
         args: [--fix, --exit-non-zero-on-fix]
-        exclude: ^eo/model/modeling_qwen2_5_vl\.py$
+        exclude: ^eo/model/modeling_qwen2_5_vl\.py$|^experiments/(8_vllmeval|3_simpler/simpler_env/eo)(/|$)
+
 
   - repo: https://github.com/adhtruong/mirrors-typos
     rev: v1.34.0
     hooks:
       - id: typos
         args: [--force-exclude]
-        exclude: "^(getting_started/.*\\.ipynb|assets/.*)$"
+        exclude: "^(getting_started/.*\\.ipynb|assets/.*|experiments/8_vllmeval/.*)$"
 
   - repo: https://github.com/asottile/pyupgrade
     rev: v3.20.0

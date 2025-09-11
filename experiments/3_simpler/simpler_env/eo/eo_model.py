@@ -1,6 +1,5 @@
 import os
 from collections import deque
-from typing import List, Optional
 from collections.abc import Sequence
 
 import cv2 as cv

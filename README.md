@@ -89,7 +89,28 @@ MAX_JOBS=4 pip install flash-attn==2.8.3 --no-build-isolation
 pip install -e .
 ```
 
-### 1. Inference with pre-trained model
+## Examples
+
+### Getting Started Tutorials
+
+- [Load Dataset and Customization](getting_started/1_load_dataset.ipynb) - Learn how to load and customize datasets in LeRobot format
+- [Fine-tuning on Custom Data](getting_started/2_train_finetune.ipynb) - Step-by-step guide for training EO-1 on your own data
+- [Evaluation and Deployment](getting_started/3_eval_deploy.ipynb) - Deploy trained models and run evaluations
+- [Advanced Pre-training](getting_started/4_advanced_pretrain.ipynb) - Large-scale pre-training workflows
+
+### Experiment Examples
+
+- [Demo Training](experiments/1_demo/) - Quick start with demo data and debug mode
+- [Libero Benchmark](experiments/2_libero/) - Spatial reasoning tasks and evaluation
+- [SimplerEnv Benchmark](experiments/3_simpler/) - Real-world deployment on WidowX and Google Robot
+- [SO101 Tasks](experiments/4_so101/) - SO100 collection manipulation tasks
+- [WidowX Platform](experiments/5_widowx/) - WidowX robot specific training and evaluation
+- [AgiBot Platform](experiments/6_agibot/) - AgiBot robot training and deployment
+- [Franka Platform](experiments/7_franka/) - Franka robot manipulation tasks
+- [Vision-Language Evaluation](experiments/8_vllmeval/) - Multi-modal benchmark evaluation
+- [Large-scale Pre-training](experiments/9_pretraining/) - Multi-stage pre-training with 128+ GPUs
+
+### Inference with pre-trained model
 
 **EO-1** is built entirely on 🤗 HuggingFace Transformers and Lerobot, making deployment straightforward and accessible. If your environment supports transformers and lerobot, you can load the model and run inference directly with just a few lines of code (requires ~6.5GB GPU memory). **EO-1** unifies high-level embodied reasoning with low-level robot control, producing either natural language outputs or actionable robot commands.
 
@@ -118,7 +139,7 @@ text = output.text
 actions = output.action.numpy()
 ```
 
-### 3. Datasets
+### Datasets
 
 We use [LeRobot](https://github.com/huggingface/lerobot) as the primary source for robot control training and evaluation, with [Any4LeRobot](https://github.com/Tavish9/any4lerobot) providing convenient data conversion and preprocessing utilities.
 For Multimodal data, e.g., image, video, text, points and bounding boxes, we follow the [Qwen2.5-VL](https://colab.research.google.com/github/QwenLM/Qwen2.5-VL/blob/main/cookbooks/spatial_understanding.ipynb) and [Qwen2-VL-Finetune](https://github.com/2U1/Qwen2-VL-Finetune) recipes. In interleaved pretraining, we integrate the EO-Data1.5M dataset — a large-scale, high-quality embodied dataset designed to unify reasoning and control. Data are organized in a standardized format as shown below:
@@ -205,27 +226,6 @@ torchrun $TORCH_RUN_ARGS onvisfm/train.py \
   --run-name bridge \
   --state-mode MAEN_STD
 ```
-
-## More Examples
-
-### Getting Started Tutorials
-
-- [Load Dataset and Customization](getting_started/1_load_dataset.ipynb) - Learn how to load and customize datasets in LeRobot format
-- [Fine-tuning on Custom Data](getting_started/2_train_finetune.ipynb) - Step-by-step guide for training EO-1 on your own data
-- [Evaluation and Deployment](getting_started/3_eval_deploy.ipynb) - Deploy trained models and run evaluations
-- [Advanced Pre-training](getting_started/4_advanced_pretrain.ipynb) - Large-scale pre-training workflows
-
-### Experiment Examples
-
-- [Demo Training](experiments/1_demo/) - Quick start with demo data and debug mode
-- [Libero Benchmark](experiments/2_libero/) - Spatial reasoning tasks and evaluation
-- [SimplerEnv Benchmark](experiments/3_simpler/) - Real-world deployment on WidowX and Google Robot
-- [SO101 Tasks](experiments/4_so101/) - SO100 collection manipulation tasks
-- [WidowX Platform](experiments/5_widowx/) - WidowX robot specific training and evaluation
-- [AgiBot Platform](experiments/6_agibot/) - AgiBot robot training and deployment
-- [Franka Platform](experiments/7_franka/) - Franka robot manipulation tasks
-- [Vision-Language Evaluation](experiments/8_vllmeval/) - Multi-modal benchmark evaluation
-- [Large-scale Pre-training](experiments/9_pretraining/) - Multi-stage pre-training with 128+ GPUs
 
 ## Benchmark
 
