@@ -3,7 +3,7 @@ mm_datasets:
 lerobot_datasets:
 
   - repo_id: libero_spatial_no_noops_1.0.0_lerobot
-    root: HF_LEROBOT_HOME
+    root: ./demo_data/
     select_video_keys: [observation.images.image, observation.images.wrist_image]
     select_state_keys: [observation.state]
     select_action_keys: [action]

@@ -1,8 +1,24 @@
 mm_datasets:
-  - json_path: demo_data/libero_spatial_mmu.jsonl
-  # - json_path: demo_data/refcoco/refcoco.jsonl
-  #   vision_base_path: demo_data/refcoco
+  - json_path: demo_data/refcoco/refcoco.jsonl             # jsonl file
+    vision_base_path: demo_data/refcoco                    # base path for vision data files referenced in the JSONL
+    sampling_strategy: random:10%                          # sampling strategy
 
+  - json_path: demo_data/interleaved_demo.jsonl            # interleaved data jsonl
+
+# @robot control config
 lerobot_datasets:
-  - repo_id: libero_spatial_no_noops_1.0.0_lerobot
+  - repo_id: demo25
     root: ./demo_data
+    # Optional fields:
+    # episodes: [1, 2, 3]                                  # specific episodes to load (None = all)
+    train_subtask: mix:0.9                                 # mix sub-task instructions and overall instructions with 90% sub-task
+    delta_action: false                                    # train with delta actions
+    state_mode: "MEAN_STD"                                 # state normalization mode
+    # which camera streams to load
+    select_video_keys: [observation.images.head, observation.images.hand_left, observation.images.hand_right]
+    # proprioceptive states
+    select_state_keys: [observation.states.joint.position, observation.states.effector.position]
+    # action targets
+    select_action_keys: [actions.joint.position, actions.effector.position]
+    effector_indices: [14, 15]                             # indices of effector channels in the flattened action vector
+    weight: 1.0                                            # dataset weight for sampling

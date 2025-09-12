@@ -8,7 +8,7 @@ argparser = argparse.ArgumentParser()
 argparser.add_argument(
     "--model_path",
     type=str,
-    default="outputs/",
+    default="experiments/outputs/your_path",
     help="Path to the pretrained model",
 )
 argparser.add_argument(
@@ -22,19 +22,15 @@ args = argparser.parse_args()
 
 def eval_policy():
     # set the observation (image, state, etc.)
-    image0 = "test/demo/example1.png"
-    image1 = Image.open("test/demo/example1.png")
+    image0 = "demo_data/example.png"
+    image1 = Image.open("demo_data/example.png")
 
-    model = (
-        AutoModel.from_pretrained(args.model_path, trust_remote_code=True, torch_dtype=torch.bfloat16)
-        .eval()
-        .cuda()
-    )
+    model = AutoModel.from_pretrained(args.model_path, dtype=torch.bfloat16).eval().cuda()
 
-    processor = AutoProcessor.from_pretrained(args.model_path, trust_remote_code=True)
+    processor = AutoProcessor.from_pretrained(args.model_path)
 
     batch = {
-        "observation.images.image_0": [image0],
+        "observation.images.image": [image0],
         "observation.images.wrist_image": [image1],
         "observation.state": [torch.rand(8)],
         "task": ["put the object in the box."],
