@@ -67,8 +67,8 @@ We introduce **EO-1** model, an open-source unified embodied foundation model co
 Clone the repository:
 
 ```bash
-git clone https://github.com/EO-Robotics/EO.git
-cd EO
+git clone https://github.com/EO-Robotics/EO-1.git
+cd EO-1
 ```
 
 Create a conda environment and install dependencies:
@@ -101,8 +101,8 @@ pip install -e .
 ### Experiment Examples
 
 - [Demo Training](experiments/1_demo/) - Quick start with demo data and debug mode
-- [Libero Benchmark](experiments/2_libero/) - Spatial reasoning tasks and evaluation
-- [SimplerEnv Benchmark](experiments/3_simpler/) - Real-world deployment on WidowX and Google Robot
+- [Libero Benchmark](experiments/2_libero/) - Tuning on Libero benchmark tasks
+- [SimplerEnv Benchmark](experiments/3_simpler/) - Tuning on SimplerEnv benchmark, including WidowX and Google Robot
 - [SO101 Tasks](experiments/4_so101/) - SO100 collection manipulation tasks
 - [WidowX Platform](experiments/5_widowx/) - WidowX robot specific training and evaluation
 - [AgiBot Platform](experiments/6_agibot/) - AgiBot robot training and deployment
@@ -116,27 +116,51 @@ pip install -e .
 
 ```python
 from transformers import AutoModel, AutoProcessor
-# load the model and processor
+
+# load model and processor
 processor = AutoProcessor.from_pretrained("IPEC-COMMUNITY/EO-1-3B", trust_remote_code=True)
 model = AutoModel.from_pretrained(
   "IPEC-COMMUNITY/EO-1-3B",
   trust_remote_code=True,
-  torch_dtype=torch.bfloat16
+  dtype=torch.bfloat16
 ).eval().cuda()
 
 # prepare the model input
 batch = {
-    "observation.images.image": [img], # PIL.Image
+    "observation.images.image": [img],
     "observation.images.wrist_image": [wrist_img],
     "observation.state": [state],
-    "task": ["You are a helpful physical agent equipped with both reasoning and robotic control. \
-      You see the Tic-Tac-Toe board, think strategically, act logically, and block threats."]
+    "task": ["Pick up a red piece and place it at (0, 2)."]
 }
 
-# generate multimodal outputs
-output = processor.generate(model, batch)
-text = output.text
-actions = output.action.numpy()
+# 1. action sampling [robot control]
+output = processor.select_action(model, batch)
+print(output.action)
+
+# prepare conversation
+messages = [
+    {
+        "role": "user",
+        "content": [
+            {"type": "image", "image": "demo_data/example2.png"},
+            {"type": "text", "text": "You are a helpful physical agent equipped with both reasoning and robotic control. \
+            You see the Tic-Tac-Toe board, think strategically, act logically, and block threats."},
+        ],
+    },
+]
+# 2. text generation [multimodal reasoning]
+input_length = inputs["input_ids"].shape[1]
+inputs = processor.apply_chat_template(
+  messages,
+  tokenize=True,
+  return_dict=True,
+  return_tensors="pt"
+).to("cuda")
+
+outputs = model.generate(**inputs, max_new_tokens=1024, return_dict_in_generate=True)
+generated_ids = outputs.sequences
+text = processor.decode(generated_ids[0, input_length:])
+print(text)
 ```
 
 ### Datasets
@@ -145,22 +169,40 @@ We use [LeRobot](https://github.com/huggingface/lerobot) as the primary source f
 For Multimodal data, e.g., image, video, text, points and bounding boxes, we follow the [Qwen2.5-VL](https://colab.research.google.com/github/QwenLM/Qwen2.5-VL/blob/main/cookbooks/spatial_understanding.ipynb) and [Qwen2-VL-Finetune](https://github.com/2U1/Qwen2-VL-Finetune) recipes. In interleaved pretraining, we integrate the EO-Data1.5M dataset — a large-scale, high-quality embodied dataset designed to unify reasoning and control. Data are organized in a standardized format as shown below:
 
 <p align="left"> <img src=".assets/data_example.png" width="100%"> </p>
-Here, the `lerobot` and `view` fields connect actions with multimodal conversations, enabling the model to capture the rich temporal dynamics and causal dependencies among vision, language, and action modalities — a core requirement for robust performance in open-world embodied interactions.
+Here, the `lerobot` and `view` fields connect actions with multimodal conversations, enabling the model to capture the rich temporal dynamics and causal dependencies among vision, language, and action modalities — a core requirement for robust performance in open-world embodied interactions. For more details, please refer to [getting_started/1_load_dataset](getting_started/1_load_dataset.ipynb).
 
-To combine robot control data and multimodal data, we support a flexible YAML-based configuration, where each dataset can be assigned weights and sampling strategies. This makes it easy to balance embodied control trajectories with multimodal reasoning data for interleaved training. For example:
+To combine robot control data and multimodal data, we support a [flexible YAML-based configuration](eo/data/schema.py), where each dataset can be assigned weights and sampling strategies. This makes it easy to balance embodied control trajectories with multimodal reasoning data for interleaved training. For example:
 
 ```yaml
-# configs/example.yaml
-mm_datasets: # optional
-  - json_path: LEROBOT_DATASET/bridge_interleaved_data.jsonl
-    sampling_strategy: random:5%
+# @multimodal data config
+mm_datasets:
+  - json_path: demo_data/refcoco/refcoco.jsonl # jsonl file
+    vision_base_path: demo_data/refcoco # base path for vision data files referenced in the JSONL
+    sampling_strategy: random:10% # sampling strategy
 
-  - json_path: RefCOCO/refcoco.jsonl
-    sampling_strategy: random:10%
+  - json_path: demo_data/interleaved_demo.jsonl # interleaved data jsonl
 
+# @robot control config
 lerobot_datasets:
-  - repo_id: bridge
-    select_video_keys: [observation.images.image_0]
+  - repo_id: demo25
+    root: ./demo_data
+    # Optional fields:
+    episodes: [1, 2, 3] # specific episodes to load (None = all)
+    train_subtask: mix:0.9 # mix sub-task instructions and overall instructions with 90% sub-task
+    delta_action: false # train with delta actions
+    state_mode: "MEAN_STD" # state normalization mode
+    select_video_keys: # which camera streams to load
+      [
+        observation.images.head,
+        observation.images.hand_left,
+        observation.images.hand_right,
+      ]
+    select_state_keys: # proprioceptive states
+      [observation.states.joint.position, observation.states.effector.position]
+    select_action_keys: # action targets
+      [actions.joint.position, actions.effector.position]
+    effector_indices: [14, 15] # indices of effector channels in the flattened action vector
+    weight: 1.0 # dataset weight for sampling
 ```
 
 ### 2. Fine-tuning on your dataset
@@ -174,62 +216,64 @@ lerobot_datasets:
 To fine-tune **EO-1** on your own embodiment, you only need to adapt the configuration file. Specifically, convert your dataset into the LeRobot format, then define the fields that describe where your videos, states, and actions are located. The following YAML snippet shows a typical setup:
 
 ```yaml
-# @multimodal corpora
+# @multimodal data config
+# leave empty if only robot control data
 mm_datasets:
 
-# @robot control episodes
 lerobot_datasets:
-  - repo_id: AgiBotWorld-Beta/example001 # dataset identifier
-    root: /oss/vla_next/DATA # path to the dataset root directory
-
-    # Optional fields:
-    train_subtask: mixture:0.9 # mix sub-task instructions and overall instructions with 90% sub-task
-    delta_action: false # train with delta actions
+  - repo_id: libero_spatial_no_noops_1.0.0_lerobot # replace with your dataset name
+    root: ./demo_data/ # replace with your dataset root path
     select_video_keys: [
-        observation.images.head,
-        observation.images.hand_left,
-        observation.images.hand_right,
-      ] # which camera streams to load
-    select_state_keys: [
-        observation.states.joint.position,
-        observation.states.effector.position,
-      ] # proprioceptive states
-    select_action_keys: [actions.joint.position, actions.effector.position] # the action targets to supervise during training
-    select_effector_keys: [actions.effector.position] # effector control channels
-    effector_indices: [14, 15] # indices of effector channels in the flattened action vector
+        observation.images.image,
+        observation.images.wrist_image,
+      ] # replace with your feature keys
+    select_state_keys: [observation.state]
+    select_action_keys: [action]
+
+  - repo_id: libero_90_no_noops_lerobot
+    root: HF_LEROBOT_HOME
+    # If not specified, uses all keys by default
 ```
 
-Once your dataset is prepared and the configuration file (e.g., example.yaml) is set up, you can launch fine-tuning with the following command. We use torchrun to support distributed or multi-GPU training, while the arguments control training mode, optimization, and which model components to freeze or update.
+Once your dataset is prepared and the configuration file (e.g., example.yaml) is set up, you can launch fine-tuning with the following command. We use torchrun to support distributed or multi-GPU training, while the arguments control training mode, optimization, and which model components to freeze or update. Please launch scripts to [experiments/1_demo](experiments/1_demo) and [experiments/2_libero](experiments/2_libero)to start a demo training.
 
 ```bash
-torchrun $TORCH_RUN_ARGS onvisfm/train.py \
-  ${model_name_or_path:+--model-name-or-path $model_name_or_path} \ # load pre-trained model
-  --vlm-name-or-path ../pretrained/Qwen2.5-VL-3B-Instruct \ # load vlm backbone from Qwen2.5-VL-3B-Instruct
-  --train-lerobot-only True \ # w/o multimodal data
-  --data-path configs/example.yaml \
-  --chunk-size 16 \
-  --dataloader-num-workers 8 \
-  --freeze-vision-tower False \
-  --freeze-llm False \
-  --freeze-merger False \
-  --bf16 True \
-  --tf32 True \
-  --num-train-epochs 25 \
-  --per-device-train-batch-size 64 \
-  --learning-rate 5e-5 \
-  --merger-lr 5e-5 \
-  --vision-lr 1e-5 \
-  --warmup-ratio 0.03 \
-  --gradient-checkpointing True \
-  --save-steps 2000 \
-  --report-to wandb \
-  --run-name bridge \
-  --state-mode MAEN_STD
+accelerate launch $ACCELERATE_ARGS scripts/train.py \
+    ${model_name_or_path:+--model-name-or-path $model_name_or_path} \
+    ${deepspeed:+--deepspeed configs/${deepspeed}.json} \
+    --vlm-name-or-path ../pretrained/Qwen2.5-VL-3B-Instruct \
+    --train-lerobot-only ${lerobot_only} \
+    --data-path ${dataset} \
+    --chunk-size ${chunk_size} \
+    --dataloader-num-workers ${data_num_workers} \
+    --freeze-vision-tower False \
+    --freeze-llm False \
+    --freeze-merger False \
+    --bf16 True \
+    --tf32 True \
+    --fp16 False \
+    --num-train-epochs ${epoch} \
+    --per-device-train-batch-size ${PER_DEVICE_BATCH_SIZE} \
+    --gradient-accumulation-steps 1 \
+    --learning-rate ${lr} \
+    --merger-lr ${mlr} \
+    --vision-lr ${vlr} \
+    --weight-decay 0.1 \
+    --warmup-ratio 0.03 \
+    --lr-scheduler-type cosine \
+    --logging-steps ${logging_steps} \
+    --gradient-checkpointing True \
+    --save-strategy steps \
+    --save-steps ${save_steps} \
+    --save-total-limit 3 \
+    --report-to ${report} \
+    --run-name ${run_name} \
+    --attn-implementation flash_attention_2
 ```
 
 ## Benchmark
 
-Mastering Diverse Manipulations on Multiple Embodiments
+Mastering Diverse Manipulations on Multiple Embodiments. More details can be found in [experiments/2_libero](experiments/2_libero/), [experiments/3_simpler](experiments/3_simpler/), and [experiments/8_vllmeval](experiments/8_vllmeval/).
 
 | Model        | Franka Pick-and-Place (7 Tasks) | AgiBot Long-horizon Dexterity (4 Tasks) | WidowX Out-of-Box (13 Tasks) | Reasoning Control (4 Tasks) |
 | ------------ | ------------------------------- | --------------------------------------- | ---------------------------- | --------------------------- |
@@ -260,6 +304,7 @@ Robot Control Benchmark Results
 
 ## 📅 Roadmap
 
+- [x] 🤖 Release [EO-1](https://huggingface.co/IPEC-COMMUNITY/EO-1-3B) pretraining, finetune scripts, and documentations.
 - [ ] 🤗 Release [pre-training models](https://huggingface.co/collections/IPEC-COMMUNITY/eo-robotics-68ac4ff30e1f746cac28ca14) and experiment finetune scripts.
 - [ ] 🔥 Release Interleaved Dataset `EO-Data1.5M`, benchmark `EO-Bench` and all detailed pre-training code.
 - [ ] ⚡️ Efficient LLM Inference over Long Sequences, Efficient KV-cache, etc.

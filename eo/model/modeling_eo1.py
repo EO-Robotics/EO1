@@ -20,10 +20,14 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F  # noqa: N812
 from torch import Tensor
-from torch.nn import CrossEntropyLoss
 from transformers.activations import ACT2FN
 from transformers.modeling_outputs import ModelOutput
-from transformers.utils import is_torchdynamo_compiling, logging
+from transformers.processing_utils import Unpack
+from transformers.utils import (
+    TransformersKwargs,
+    is_torchdynamo_compiling,
+    logging,
+)
 
 from .configuration_eo1 import EO1VisionFlowMatchingConfig
 from .modeling_qwen2_5_vl import Qwen2_5_VLForConditionalGeneration
@@ -108,12 +112,10 @@ class EO1VisionActionProjector(torch.nn.Sequential):
         layers = []
         in_dim = in_channels
         hidden_channels = [in_dim] * (num_layers - 1) + [out_channels]
-
         for hidden_dim in hidden_channels[:-1]:
             layers.append(torch.nn.Linear(in_dim, hidden_dim, bias=bias, dtype=dtype, device=device))
             layers.append(ACT2FN[activation_layer])
             in_dim = hidden_dim
-
         layers.append(torch.nn.Linear(in_dim, hidden_channels[-1], bias=bias, dtype=dtype, device=device))
         super().__init__(*layers)
 
@@ -131,7 +133,6 @@ class EO1VisionFlowMatchingModel(Qwen2_5_VLForConditionalGeneration):
         build_projector: bool = True,
     ):
         super().__init__(config)
-
         if build_projector:
             self.build_projector()
 
@@ -150,7 +151,6 @@ class EO1VisionFlowMatchingModel(Qwen2_5_VLForConditionalGeneration):
             dtype=dtype,
             device=device,
         )
-
         self.action_time_mlp_in = nn.Linear(hidden_size * 2, hidden_size).to(dtype=dtype, device=device)
         self.action_time_mlp_out = nn.Linear(hidden_size, hidden_size).to(dtype=dtype, device=device)
 
@@ -176,7 +176,6 @@ class EO1VisionFlowMatchingModel(Qwen2_5_VLForConditionalGeneration):
         if special_features is not None and special_token_ids is not None:
             n_special_tokens = (input_ids == special_token_ids).sum().item()
             n_special_features = special_features.shape[0]
-
             assert n_special_tokens == n_special_features, (
                 f"Special features and special tokens {special_token_ids} do not match: \
                 tokens: {n_special_tokens}, features {n_special_features}"
@@ -207,9 +206,11 @@ class EO1VisionFlowMatchingModel(Qwen2_5_VLForConditionalGeneration):
         rope_deltas: torch.LongTensor | None = None,
         cache_position: torch.LongTensor | None = None,
         second_per_grid_ts: torch.Tensor | None = None,
+        logits_to_keep: int | torch.Tensor = 0,
         states: torch.Tensor | None = None,
         actions: torch.Tensor | None = None,
         action_is_pad: torch.Tensor | None = None,
+        **kwargs: Unpack[TransformersKwargs],
     ) -> tuple | EO1VisionFlowMatchingOutputWithPast:
         output_attentions = (
             output_attentions if output_attentions is not None else self.config.output_attentions
@@ -217,74 +218,76 @@ class EO1VisionFlowMatchingModel(Qwen2_5_VLForConditionalGeneration):
         output_hidden_states = (
             output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
         )
-
         if inputs_embeds is None:
-            inputs_embeds = self.model.embed_tokens(input_ids)
-            if pixel_values is not None:
-                pixel_values = pixel_values.type(self.visual.dtype)
-                image_embeds = self.visual(pixel_values, grid_thw=image_grid_thw)
-                inputs_embeds, _ = self.replace_special_embeddings(
-                    input_ids, inputs_embeds, image_embeds, self.config.image_token_id
-                )
+            inputs_embeds = self.get_input_embeddings()(input_ids)
 
-            if pixel_values_videos is not None:
-                pixel_values_videos = pixel_values_videos.type(self.visual.dtype)
-                video_embeds = self.visual(pixel_values_videos, grid_thw=video_grid_thw)
-                inputs_embeds, _ = self.replace_special_embeddings(
-                    input_ids, inputs_embeds, video_embeds, self.config.video_token_id
-                )
+        if pixel_values is not None:
+            image_embeds = self.get_image_features(pixel_values, image_grid_thw)
+            image_embeds = torch.cat(image_embeds, dim=0).to(inputs_embeds.device, inputs_embeds.dtype)
+            image_mask, _ = self.get_placeholder_mask(
+                input_ids, inputs_embeds=inputs_embeds, image_features=image_embeds
+            )
+            inputs_embeds = inputs_embeds.masked_scatter(image_mask, image_embeds)
 
-            if states is not None:
-                states = states.type(self.state_proj.weight.dtype)
-                state_embs = self.state_proj(states)
-                inputs_embeds, _ = self.replace_special_embeddings(
-                    input_ids, inputs_embeds, state_embs, self.config.text_config.state_token_id
-                )
+        if pixel_values_videos is not None:
+            video_embeds = self.get_video_features(pixel_values_videos, video_grid_thw)
+            video_embeds = torch.cat(video_embeds, dim=0).to(inputs_embeds.device, inputs_embeds.dtype)
+            _, video_mask = self.get_placeholder_mask(
+                input_ids, inputs_embeds=inputs_embeds, video_features=video_embeds
+            )
+            inputs_embeds = inputs_embeds.masked_scatter(video_mask, video_embeds)
 
-            if actions is not None:
-                noise_mask = input_ids == self.config.text_config.action_token_id
-                pass_mask = input_ids == self.config.text_config.action_pass_id
-                mask = noise_mask | pass_mask  # (b s)
+        if states is not None:
+            states = states.type(self.state_proj.weight.dtype)
+            state_embs = self.state_proj(states)
+            inputs_embeds, _ = self.replace_special_embeddings(
+                input_ids, inputs_embeds, state_embs, self.config.text_config.state_token_id
+            )
 
-                pass_mask_in_action = pass_mask[mask]  # (n, )
-                pass_mask_in_action = pass_mask_in_action.reshape(*actions.shape[:2], 1)  # (b, h, 1)
+        if actions is not None:
+            noise_mask = input_ids == self.config.text_config.action_token_id
+            pass_mask = input_ids == self.config.text_config.action_pass_id
+            mask = noise_mask | pass_mask  # (b s)
 
-                time = sample_time(actions.shape[0], inputs_embeds.device)  # (n,)
-                time_expanded = time[:, None, None].repeat(1, actions.shape[1], 1)  # (b, h, 1)
-                time_expanded[pass_mask_in_action] = 0.0
+            pass_mask_in_action = pass_mask[mask]  # (n, )
+            pass_mask_in_action = pass_mask_in_action.reshape(*actions.shape[:2], 1)  # (b, h, 1)
 
-                noise = sample_noise(actions.shape, inputs_embeds.device)
-                x_t = time_expanded * noise + (1 - time_expanded) * actions
-                u_t = noise - actions
+            time = sample_time(actions.shape[0], inputs_embeds.device)  # (n,)
+            time_expanded = time[:, None, None].repeat(1, actions.shape[1], 1)  # (b, h, 1)
+            time_expanded[pass_mask_in_action] = 0.0
 
-                time_embs = create_sinusoidal_pos_embedding(
-                    time,
-                    self.config.text_config.hidden_size,
-                    device=inputs_embeds.device,
-                )
-                time_embs = time_embs.type(inputs_embeds.dtype)
+            noise = sample_noise(actions.shape, inputs_embeds.device)
+            x_t = time_expanded * noise + (1 - time_expanded) * actions
+            u_t = noise - actions
 
-                x_t = x_t.type(self.action_in_proj.weight.dtype)
-                action_embs = self.action_in_proj(x_t)
-                time_embs = time_embs[:, None, :].expand_as(action_embs)
+            time_embs = create_sinusoidal_pos_embedding(
+                time,
+                self.config.text_config.hidden_size,
+                device=inputs_embeds.device,
+            )
+            time_embs = time_embs.type(inputs_embeds.dtype)
 
-                action_time_embs = torch.cat([action_embs, time_embs], dim=2)
-                action_time_embs = self.action_time_mlp_in(action_time_embs)
-                action_time_embs = F.silu(action_time_embs)
-                action_time_embs = self.action_time_mlp_out(action_time_embs)
+            x_t = x_t.type(self.action_in_proj.weight.dtype)
+            action_embs = self.action_in_proj(x_t)
+            time_embs = time_embs[:, None, :].expand_as(action_embs)
 
-                num_actions = mask.sum().item()
-                num_action_features = action_time_embs.shape[0] * action_time_embs.shape[1]
-                assert num_actions == num_action_features, (
-                    f"action features and tokens do not match: {num_actions=}, {num_action_features=}"
-                )
+            action_time_embs = torch.cat([action_embs, time_embs], dim=2)
+            action_time_embs = self.action_time_mlp_in(action_time_embs)
+            action_time_embs = F.silu(action_time_embs)
+            action_time_embs = self.action_time_mlp_out(action_time_embs)
 
-                mask_unsqueezed = mask.unsqueeze(-1)
-                mask_expanded = mask_unsqueezed.expand_as(inputs_embeds)
-                action_mask = mask_expanded.to(inputs_embeds.device)
+            num_actions = mask.sum().item()
+            num_action_features = action_time_embs.shape[0] * action_time_embs.shape[1]
+            assert num_actions == num_action_features, (
+                f"action features and tokens do not match: {num_actions=}, {num_action_features=}"
+            )
 
-                action_time_embs = action_time_embs.to(inputs_embeds.device, inputs_embeds.dtype)
-                inputs_embeds = inputs_embeds.masked_scatter(action_mask, action_time_embs)
+            mask_unsqueezed = mask.unsqueeze(-1)
+            mask_expanded = mask_unsqueezed.expand_as(inputs_embeds)
+            action_mask = mask_expanded.to(inputs_embeds.device)
+
+            action_time_embs = action_time_embs.to(inputs_embeds.device, inputs_embeds.dtype)
+            inputs_embeds = inputs_embeds.masked_scatter(action_mask, action_time_embs)
 
             if attention_mask is not None:
                 attention_mask = attention_mask.to(inputs_embeds.device)
@@ -332,13 +335,21 @@ class EO1VisionFlowMatchingModel(Qwen2_5_VLForConditionalGeneration):
 
         _actions = None
         if not (self.training or states is None) and actions is None and self._has_action_gen_seq(input_ids):
+            # action sampling
             _actions, outputs = self._sample_actions(input_ids=input_ids, **model_kwargs)
-            hidden_states = outputs[0]
-            logits = self.lm_head(hidden_states[:, -1])
+            logits = torch.zeros(
+                inputs_embeds.shape[0], 1, self.config.text_config.vocab_size, device=inputs_embeds.device
+            )
+            logits[..., self.config.text_config.eos_token_id] = 33.8125  # <|im_end|>
         else:
+            # text generation
             outputs = self.model(**model_kwargs)
             hidden_states = outputs[0]
-            logits = self.lm_head(hidden_states)
+            # only compute necessary logits, do not upcast to float if not computing loss
+            slice_indices = (
+                slice(-logits_to_keep, None) if isinstance(logits_to_keep, int) else logits_to_keep
+            )
+            logits = self.lm_head(hidden_states[:, slice_indices, :])
 
         loss = None
         fm_loss = None
@@ -346,9 +357,11 @@ class EO1VisionFlowMatchingModel(Qwen2_5_VLForConditionalGeneration):
         if actions is not None:
             action_time_embs = hidden_states[action_mask[..., 0]]
             action_time_embs = action_time_embs.type(self.action_out_proj.dtype)
+
             v_t = self.action_out_proj(action_time_embs)
             u_t = u_t.reshape(v_t.shape)
             v_t = v_t.type(u_t.dtype)
+
             losses = F.mse_loss(u_t, v_t, reduction="none")
             if action_is_pad is not None:
                 in_episode_bound = (~action_is_pad).reshape(-1, 1)
@@ -361,15 +374,9 @@ class EO1VisionFlowMatchingModel(Qwen2_5_VLForConditionalGeneration):
 
         ar_loss = None
         if labels is not None:
-            logits = logits.float()
-            shift_logits = logits[..., :-1, :].contiguous()
-            shift_labels = labels[..., 1:].contiguous()
-            loss_fct = CrossEntropyLoss()
-            shift_logits = shift_logits.view(-1, self.vocab_size)
-            shift_labels = shift_labels.view(-1)
-            # enable model parallelism
-            shift_labels = shift_labels.to(shift_logits.device)
-            ar_loss = loss_fct(shift_logits, shift_labels)
+            ar_loss = self.loss_function(
+                logits=logits, labels=labels, vocab_size=self.config.text_config.vocab_size, **kwargs
+            )
             loss = loss + ar_loss if loss is not None else ar_loss
 
         return EO1VisionFlowMatchingOutputWithPast(
@@ -398,15 +405,15 @@ class EO1VisionFlowMatchingModel(Qwen2_5_VLForConditionalGeneration):
         return_dict: bool | None = None,
         cache_position: torch.LongTensor | None = None,
     ) -> Tensor:
-        """Sample actions from the model, break down into 2 steps to make a unified generation interface:
-        1. pass the mm prefix to the model, and update kvcache
-        2. perform denoising steps, with noise q and mm kvcache
+        """Sample actions from the model, break down into 3 steps to make a unified generation interface:
         input_ids:
         <|im_start|>user<|vision_start|><|image_pad|>...<|vision_end|><|state_start|><|state_pad|><|state_end|>task...<|vla|><|im_end|> -> AR kvcache
         <|im_start|>assistant<|action_start|><|action_pad|>...<|action_end|> -> FM denoising
         <|im_end|> -> AR
         """
         chunksz_eoa = self.config.action_chunk_size + 1
+
+        # 1. pass the mm prefix to the model, and update kvcache
         mm_outputs = self.model(
             position_ids=position_ids[..., :-chunksz_eoa],
             attention_mask=attention_mask[:, :-chunksz_eoa],
@@ -415,6 +422,8 @@ class EO1VisionFlowMatchingModel(Qwen2_5_VLForConditionalGeneration):
             use_cache=use_cache,
             cache_position=cache_position[:-chunksz_eoa],
         )
+
+        # 2. perform denoising steps, with noise q and mm kvcache
         device = inputs_embeds.device
         x_t = sample_noise(
             [
@@ -469,6 +478,9 @@ class EO1VisionFlowMatchingModel(Qwen2_5_VLForConditionalGeneration):
             # euler step
             x_t += dt * v_t.reshape(x_t.shape)
             time += dt
+
+        # 3. get the final EOS token logits
+
         outputs.last_hidden_state = torch.cat(
             [mm_outputs.last_hidden_state, outputs.last_hidden_state], dim=1
         )
