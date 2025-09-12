@@ -226,9 +226,11 @@ source
 
 experiments/outputs
 scripts/env.sh
-scripts/pre-commit.sh
+pre-commit.sh
 tools/caption_video.html
 
 experiments/2_libero/logs
 experiments/2_libero/logs/videos
 demo_data/demos25
+
+demo_data/libero_spatial_no_noops_1.0.0_lerobot
