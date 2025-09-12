@@ -831,7 +831,6 @@ class Qwen2_5_VLModel(Qwen2_5_VLPreTrainedModel):
     def set_input_embeddings(self, value):
         self.embed_tokens = value
 
-    @auto_docstring
     def forward(
         self,
         input_ids: torch.LongTensor | None = None,

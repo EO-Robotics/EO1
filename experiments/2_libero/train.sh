@@ -1,8 +1,7 @@
 GPUS=8
 PER_DEVICE_BATCH_SIZE=64
 
-ACCELERATE_ARGS="--main_process_ip=\$MASTER_ADDR --main_process_port=\$MASTER_PORT \
-  --num_machines 1 --machine_rank 0 --num_processes=${GPUS} --multi_gpu"
+ACCELERATE_ARGS="--num_machines 1 --machine_rank 0 --num_processes=${GPUS} --multi_gpu"
 
 # datasets
 dataset=experiments/2_libero/data-libero.yaml
