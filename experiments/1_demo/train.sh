@@ -15,6 +15,7 @@ vlr=2e-5
 chunk_size=30
 epoch=50
 
+model_name_or_path=
 run_name=${dataset_name}_ck${chunk_size}_gpu${GPUS}_lr${lr}_vlr${vlr}_mlr${mlr}_bs${PER_DEVICE_BATCH_SIZE}
 
 . scripts/env.sh
