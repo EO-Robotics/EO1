@@ -37,6 +37,7 @@ dependencies = [
     "datasets>=2.19.0,<=3.6.0",
     "huggingface-hub[hf-transfer,cli]>=0.34.2",
     "lerobot>=0.3.3",
+    "transformers==4.56.0",
 
     # Core dependencies
     "cmake>=3.29.0.1",

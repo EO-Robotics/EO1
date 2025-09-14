@@ -55,7 +55,7 @@ class EO1VisionFlowMatchingConfig(Qwen2_5_VLConfig):
         # flow matching specific
         action_chunk_size=50,
         max_action_dim=32,
-        num_denoise_steps=5,
+        num_denoise_steps=10,
         action_act="linear",
         num_action_layers=2,
         **kwargs,

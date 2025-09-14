@@ -8,7 +8,7 @@ argparser = argparse.ArgumentParser()
 argparser.add_argument(
     "--model_path",
     type=str,
-    default="experiments/outputs/your_path",
+    default="outputs/your_path",
     help="Path to the pretrained model",
 )
 argparser.add_argument(
@@ -36,12 +36,10 @@ def eval_policy():
         "task": ["put the object in the box."],
         "repo_id": [args.repo_id],
     }
-
     ov_output = processor.select_action(
         model,
         batch,
     )
-
     print(ov_output)
 
 

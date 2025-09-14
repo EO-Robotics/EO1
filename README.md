@@ -148,6 +148,7 @@ messages = [
         ],
     },
 ]
+
 # 2. text generation [multimodal reasoning]
 input_length = inputs["input_ids"].shape[1]
 inputs = processor.apply_chat_template(
@@ -176,11 +177,13 @@ To combine robot control data and multimodal data, we support a [flexible YAML-b
 ```yaml
 # @multimodal data config
 mm_datasets:
+  # classical multimodal data
   - json_path: demo_data/refcoco/refcoco.jsonl # jsonl file
     vision_base_path: demo_data/refcoco # base path for vision data files referenced in the JSONL
-    sampling_strategy: random:10% # sampling strategy
+    sampling_strategy: random:100% # sampling strategy
 
-  - json_path: demo_data/interleaved_demo.jsonl # interleaved data jsonl
+  # interleaved data jsonl, rely on `lerobot_datasets` to load robot control data
+  - json_path: demo_data/interleaved_demo.jsonl
 
 # @robot control config
 lerobot_datasets:
@@ -305,8 +308,7 @@ Robot Control Benchmark Results
 ## 📅 Roadmap
 
 - [x] 🤖 Release [EO-1](https://huggingface.co/IPEC-COMMUNITY/EO-1-3B) pretraining, finetune scripts, and documentations.
-- [ ] 🤗 Release [pre-training models](https://huggingface.co/collections/IPEC-COMMUNITY/eo-robotics-68ac4ff30e1f746cac28ca14) and experiment finetune scripts.
-- [ ] 🔥 Release Interleaved Dataset `EO-Data1.5M`, benchmark `EO-Bench` and all detailed pre-training code.
+- [ ] 🤗 Release [pre-training models](https://huggingface.co/collections/IPEC-COMMUNITY/eo-robotics-68ac4ff30e1f746cac28ca14), Interleaved Dataset `EO-Data1.5M` and benchmark `EO-Bench`.
 - [ ] ⚡️ Efficient LLM Inference over Long Sequences, Efficient KV-cache, etc.
 - [ ] 🤖 Integrate with human feedback fine-tuning.
 

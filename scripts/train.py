@@ -14,7 +14,7 @@ from transformers import HfArgumentParser
 
 from eo.data.dataset import make_supervised_data_module
 from eo.model.modeling_eo1 import EO1VisionFlowMatchingModel
-from eo.model.processor import OneVisionProcessor
+from eo.model.processing_eo1 import OneVisionProcessor
 from eo.train.pipeline_config import TrainPipelineConfig
 from eo.train.train_utils import (
     aggregate_dataset_length,
@@ -148,7 +148,9 @@ def train():
 
     model.config.use_cache = True
     trainer.save_state()
-    safe_save_model_for_hf_trainer(trainer=trainer, output_dir=training_args.output_dir)
+    safe_save_model_for_hf_trainer(
+        trainer=trainer, output_dir=f"{training_args.output_dir}/checkpoint-final-{trainer.state.global_step}"
+    )
 
 
 if __name__ == "__main__":

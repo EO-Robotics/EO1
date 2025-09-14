@@ -1,7 +1,7 @@
 mm_datasets:
   - json_path: demo_data/refcoco/refcoco.jsonl             # jsonl file
     vision_base_path: demo_data/refcoco                    # base path for vision data files referenced in the JSONL
-    sampling_strategy: random:10%                          # sampling strategy
+    sampling_strategy: random:100%                         # sampling strategy
 
   - json_path: demo_data/interleaved_demo.jsonl            # interleaved data jsonl
 

@@ -48,7 +48,7 @@ pip install huggingface-cli
 # Download EO-1-3B model
 huggingface-cli download --resume-download --local-dir-use-symlinks False \
   IPEC-COMMUNITY/EO-1-3B \
-  --local-dir IPEC-COMMUNITY/EO-1-3B
+  --local-dir EO-1-3B
 ```
 
 ### 2. Download Benchmark Datasets
@@ -58,18 +58,20 @@ cd YOUR_PATH_TO_DATASET
 
 # Download all benchmark datasets
 datasets=(
-  IPEC-COMMUNITY/EO-Bench
-  IPEC-COMMUNITY/ERQABench
-  IPEC-COMMUNITY/RoboVQA
+  ERQABench
+  RoboVQA
+  EO-Bench
 )
+
+HF_DATASET_HOME=YOUR_PATH_TO_DATASET
 
 for dataset in ${datasets[@]};
 do
   echo "Downloading ${dataset}..."
   huggingface-cli download \
   --repo-type dataset --resume-download --local-dir-use-symlinks False \
-  ${dataset} \
-  --local-dir ${dataset}
+  IPEC-COMMUNITY/${dataset} \
+  --local-dir ${HF_DATASET_HOME}/${dataset}
 done
 ```
 
