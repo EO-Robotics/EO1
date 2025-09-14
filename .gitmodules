@@ -1,0 +1,3 @@
+[submodule "experiments/7_franka/deoxys_control"]
+	path = experiments/7_franka/deoxys_control
+	url = https://github.com/UT-Austin-RPL/deoxys_control.git

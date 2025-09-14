@@ -233,6 +233,7 @@ tools/caption_video.html
 experiments/2_libero/logs
 experiments/2_libero/logs/videos
 demo_data/demos25
+**/videos/**
 
 demo_data/libero_spatial_no_noops_1.0.0_lerobot
 experiments/test

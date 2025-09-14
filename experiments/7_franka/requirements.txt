@@ -1,0 +1,8 @@
+torch
+transformers>=4.56.0
+opencv-python
+imageio
+tyro
+pillow
+pyrealsense2
+lerobot
