@@ -1,10 +1,10 @@
-from transformers import AutoProcessor, AutoModel
+from transformers import AutoModel, AutoProcessor
 
 """set model name or path"""
 model_name_or_path = "../pretrained/Qwen2.5-VL-3B-Instruct"  # or EO-3B
 model = AutoModel.from_pretrained(
     model_name_or_path,
-    device_map="auto"
+    device_map="auto",
     # attn_implementation="flash_attention_2",
 )
 
