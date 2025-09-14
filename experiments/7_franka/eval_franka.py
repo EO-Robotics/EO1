@@ -125,7 +125,7 @@ def main(args: Args):
                     replay_images.append(frame)
                     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                     ego_frame_rgb = cv2.cvtColor(ego_frame, cv2.COLOR_BGR2RGB)
-                    replay_images.append(frame_rgb.copy())  # 只复制需要保存的帧
+                    replay_images.append(frame_rgb.copy())
 
                     eef_pose = np.asarray(last_state.O_T_EE, dtype=np.float32).reshape(4, 4).T
                     eef_state = np.concatenate(
@@ -166,10 +166,10 @@ def main(args: Args):
 
                 pred_action_chunk = action_plan.popleft()
                 action = pred_action_chunk
-                # rotation_matrix = dft.euler2mat(action[3:6])
-                # quat = dft.mat2quat(rotation_matrix)
-                # axis_angle = dft.quat2axisangle(quat)
-                # action[3:6] = axis_angle
+                rotation_matrix = dft.euler2mat(action[3:6])
+                quat = dft.mat2quat(rotation_matrix)
+                axis_angle = dft.quat2axisangle(quat)
+                action[3:6] = axis_angle
                 action = convert_gripper_action(action)
 
                 robot_interface.control(
