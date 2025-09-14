@@ -87,7 +87,7 @@ repos:
     - id: bandit
       args: ["-c", "pyproject.toml"]
       additional_dependencies: ["bandit[toml]"]
-      exclude: ^eo/constants\.py$|eo/model/processor\.py$
+      exclude: ^eo/constants\.py$|eo/model/processing_eo1\.py$
 
   # TODO(Steven): Uncomment when ready to use
   ##### Static Analysis & Typing #####
