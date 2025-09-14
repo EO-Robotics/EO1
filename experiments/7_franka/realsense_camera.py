@@ -1,5 +1,3 @@
-from typing import Dict, List, Optional, Tuple
-
 import numpy as np
 import pyrealsense2 as rs
 
@@ -23,7 +21,7 @@ serial_number_to_cam_intr = {
 class Camera:
     def __init__(
         self,
-        serial_number: Optional[str] = "213522070137",
+        serial_number: str | None = "213522070137",
         camera_width: int = 640,
         camera_height: int = 480,
         camera_fps: int = 30,
@@ -64,7 +62,7 @@ class Camera:
     def close(self):
         self.pipeline.stop()
 
-    def get_frame(self, filter=True) -> Tuple[np.ndarray, np.ndarray]:
+    def get_frame(self, filter=True) -> tuple[np.ndarray, np.ndarray]:
         """
         Args:
             filter bool optional Whether to apply filters to depth frames. Defaults to True.
@@ -109,7 +107,7 @@ class Camera:
 
         return color_image, depth_image * self.depth_scale
 
-    def get_camera_intrinsics(self, use_raw=False, serial_number: Optional[str] = "213522070137"):
+    def get_camera_intrinsics(self, use_raw=False, serial_number: str | None = "213522070137"):
         """
         Args:
             use_raw bool optional Whether to use the camera intrinsics from the raw stream. Defaults to False.
@@ -131,7 +129,7 @@ class Camera:
 class MultiCamera:
     def __init__(
         self,
-        serial_numbers: Optional[List[str]] = None,
+        serial_numbers: list[str] | None = None,
         camera_width: int = 640,
         camera_height: int = 480,
         camera_fps: int = 30,
@@ -170,15 +168,15 @@ class MultiCamera:
             camera.close()
 
     def get_frame(
-        self, serial_numbers: Optional[List[str]] = None, filter=True
-    ) -> Dict[str, Tuple[np.ndarray, np.ndarray]]:
+        self, serial_numbers: list[str] | None = None, filter=True
+    ) -> dict[str, tuple[np.ndarray, np.ndarray]]:
         if serial_numbers is None:
             serial_numbers = list(self.cameras.keys())
         return {serial_number: self.cameras[serial_number].get_frame() for serial_number in serial_numbers}
 
     def get_camera_intrinsics(
-        self, serial_numbers: Optional[List[str]] = None, use_raw=False
-    ) -> Dict[str, Dict[str, float]]:
+        self, serial_numbers: list[str] | None = None, use_raw=False
+    ) -> dict[str, dict[str, float]]:
         if serial_numbers is None:
             serial_numbers = self.cameras.keys()
         return {
