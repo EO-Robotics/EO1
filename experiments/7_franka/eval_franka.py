@@ -182,7 +182,7 @@ def main(args: Args):
         # saving video
         video_save_path = args.video_out_path / args.task.replace(" ", "_")
         video_save_path.mkdir(parents=True, exist_ok=True)
-        curr_time = datetime.now().strftime("%Y_%m_%d_%H:%M:%S")
+        curr_time = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
         save_path = video_save_path / f"{curr_time}.mp4"
         video = np.stack(replay_images)
         imageio.mimsave(save_path, video, fps=20)
