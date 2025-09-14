@@ -25,19 +25,21 @@ pip install huggingface-cli
 
 # Download all Libero datasets
 datasets=(
-    IPEC-COMMUNITY/libero_spatial_no_noops_1.0.0_lerobot
-    IPEC-COMMUNITY/libero_object_no_noops_1.0.0_lerobot
-    IPEC-COMMUNITY/libero_90_no_noops_lerobot
-    IPEC-COMMUNITY/libero_10_no_noops_1.0.0_lerobot
+    libero_spatial_no_noops_1.0.0_lerobot
+    libero_object_no_noops_1.0.0_lerobot
+    libero_90_no_noops_lerobot
+    libero_10_no_noops_1.0.0_lerobot
 )
+
+HF_LEROBOT_HOME=YOUR_PATH_TO_DATASET
 
 for dataset in ${datasets[@]};
 do
   echo "Downloading ${dataset}..."
   huggingface-cli download \
   --repo-type dataset --resume-download --local-dir-use-symlinks False \
-  ${dataset} \
-  --local-dir ${dataset}
+  IPEC-COMMUNITY/${dataset} \
+  --local-dir ${HF_LEROBOT_HOME}/${dataset}
 done
 ```
 

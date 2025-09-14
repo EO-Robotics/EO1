@@ -148,8 +148,6 @@ class LeRobotDataset(BaseLeRobotDataset):
 
     def set_delta_action(self, delta_action: bool, effector_indices: list[int] | None = None):
         """set delta action mode for lerobot dataset"""
-
-        print(f"* set delta action mode for {self.repo_id} ...")
         self.delta_action = delta_action
         self.effector_indices = effector_indices or []
 
@@ -157,6 +155,8 @@ class LeRobotDataset(BaseLeRobotDataset):
             return
 
         import numpy as np
+
+        print(f"* set delta action mode for {self.repo_id} ...")
 
         acum_idx = 0
         cumulative_lengths = self.episode_data_index["to"]
@@ -321,7 +321,7 @@ class LeRobotDataset(BaseLeRobotDataset):
 
     def post_process(self, item: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
         """sort the keys in the order of select_feature_keys"""
-        # item = {k: item[k] for k in (self.select_feature_keys + ["task"] + self.select_action_is_pad_keys)}
+        item = {k: item[k] for k in (self.select_feature_keys + ["task"] + self.select_action_is_pad_keys)}
         item = self.normalizer(item)
         return item
 
@@ -348,7 +348,6 @@ class MultiLeRobotDataset(BaseMultiLeRobotDataset):
 
         # load lerobot datasets
         num_processes = int(os.environ.get("DATASET_NUM_PROCESSES", 8))
-        # num_processes = min(int(os.cpu_count() * 0.8), int(os.environ.get("DATASET_NUM_PROCESSES", 10)))
         print(f"* load {len(data_configs)} lerobot datasets with {num_processes} processes ...")
         pool = multiprocessing.Pool(processes=num_processes)
         fn = partial(

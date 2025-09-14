@@ -1,17 +1,14 @@
-from transformers import AutoProcessor
-
-from eo.model.modeling_qwen2_5_vl import Qwen2_5_VLForConditionalGeneration
+from transformers import AutoProcessor, AutoModel
 
 """set model name or path"""
 model_name_or_path = "../pretrained/Qwen2.5-VL-3B-Instruct"  # or EO-3B
-model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+model = AutoModel.from_pretrained(
     model_name_or_path,
-    device_map="auto",
-    trust_remote_code=True,
+    device_map="auto"
     # attn_implementation="flash_attention_2",
 )
 
-processor = AutoProcessor.from_pretrained(model_name_or_path, trust_remote_code=True)
+processor = AutoProcessor.from_pretrained(model_name_or_path)
 
 messages = [
     {

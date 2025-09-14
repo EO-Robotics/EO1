@@ -77,17 +77,19 @@ pip install huggingface-cli
 
 # Download all SimplerEnv datasets
 datasets=(
-  IPEC-COMMUNITY/fractal20220817_data_lerobot
-  IPEC-COMMUNITY/bridge_orig_lerobot
+  fractal20220817_data_lerobot
+  bridge_orig_lerobot
 )
+
+HF_LEROBOT_HOME=YOUR_PATH_TO_DATASET
 
 for dataset in ${datasets[@]};
 do
   echo "Downloading ${dataset}..."
   huggingface-cli download \
   --repo-type dataset --resume-download --local-dir-use-symlinks False \
-  ${dataset} \
-  --local-dir ${dataset}
+  IPEC-COMMUNITY/${dataset} \
+  --local-dir ${HF_LEROBOT_HOME}/${dataset}
 done
 ```
 

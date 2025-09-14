@@ -83,7 +83,7 @@ class TrainPipelineConfig(TrainingArguments):
     num_lora_modules: int = -1
 
     """experiment parameters"""
-    output_base: str = field(default="experiments/outputs", metadata={"help": "Base directory for output."})
+    output_base: str = field(default="outputs", metadata={"help": "Base directory for output."})
 
     def __post_init__(self):
         super().__post_init__()
