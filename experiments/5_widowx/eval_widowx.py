@@ -199,7 +199,7 @@ def eval_bridge(args: Args) -> None:
             )
 
             if not (0 <= success <= 1):
-                print(f"Success must be a number in [0, 100] but got: {success * 100}")
+                print(f"Success must be a number in [0, 1] but got: {success}")
 
             results_df = pd.concat(
                 [
