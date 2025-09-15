@@ -56,10 +56,10 @@ def wait_for_obs(widowx_client):
 def convert_obs(obs, im_size, *, flip=False):
     # image_obs = cv2.resize(obs["image"], (im_size, im_size), interpolation=cv2.INTER_LINEAR)
     image_obs = (obs["image"].reshape(3, im_size, im_size).transpose(1, 2, 0) * 255).astype(np.uint8)
-
+    full_image = obs["full_image"]
     if flip:
         image_obs = cv2.flip(image_obs, -1)
-        full_image = cv2.flip(obs["full_image"], -1)
+        full_image = cv2.flip(full_image, -1)
     # add padding to proprio to match training
     proprio = np.concatenate([obs["state"][:6], [0], obs["state"][-1:]])
 
