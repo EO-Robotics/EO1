@@ -22,12 +22,16 @@ args = argparser.parse_args()
 
 def eval_policy():
     # set the observation (image, state, etc.)
-    image0 = "demo_data/example.png"
-    image1 = Image.open("demo_data/example.png")
+    import numpy as np
 
-    model = AutoModel.from_pretrained(args.model_path, dtype=torch.bfloat16).eval().cuda()
+    image0 = (np.random.rand(224, 224, 3) * 255).astype(np.uint8)
+    image1 = Image.fromarray(image0.copy())
 
-    processor = AutoProcessor.from_pretrained(args.model_path)
+    model = (
+        AutoModel.from_pretrained(args.model_path, dtype=torch.bfloat16, trust_remote_code=True).eval().cuda()
+    )
+
+    processor = AutoProcessor.from_pretrained(args.model_path, trust_remote_code=True)
 
     batch = {
         "observation.images.image": [image0],
