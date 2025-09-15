@@ -1,0 +1,3 @@
+gym
+funcsigs
+numpy==1.24.3
