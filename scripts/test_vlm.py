@@ -1,8 +1,10 @@
-from transformers import AutoModel, AutoProcessor
+from transformers import AutoProcessor
+
+from eo.model.modeling_qwen2_5_vl import Qwen2_5_VLForConditionalGeneration
 
 """set model name or path"""
 model_name_or_path = "../pretrained/Qwen2.5-VL-3B-Instruct"  # or EO-3B
-model = AutoModel.from_pretrained(
+model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
     model_name_or_path,
     device_map="auto",
     # attn_implementation="flash_attention_2",
@@ -32,6 +34,7 @@ while True:
         if prompt == "q":
             exit(0)
         messages.append({"role": "user", "content": [{"type": "text", "text": prompt}]})
+
     inputs = processor.apply_chat_template(
         messages, add_generation_prompt=True, tokenize=True, return_dict=True, return_tensors="pt"
     ).to("cuda")

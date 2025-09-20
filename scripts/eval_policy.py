@@ -38,7 +38,7 @@ def eval_policy():
         "observation.images.wrist_image": [image1],
         "observation.state": [torch.rand(8)],
         "task": ["put the object in the box."],
-        "repo_id": [args.repo_id],
+        # "repo_id": [args.repo_id],
     }
     ov_output = processor.select_action(
         model,

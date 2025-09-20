@@ -59,7 +59,7 @@ class EOInference:
                 saved_model_path,
                 trust_remote_code=True,
                 local_files_only=True,
-                torch_dtype=torch.bfloat16,
+                dtype=torch.bfloat16,
             )
             .eval()
             .cuda()
