@@ -10,11 +10,13 @@ try:
     from peft import LoraConfig, get_peft_model
 except ImportError:
     pass
+
 from transformers import HfArgumentParser
 
 from eo.data.dataset import make_supervised_data_module
-from eo.model.modeling_eo1 import EO1VisionFlowMatchingModel
-from eo.model.processing_eo1 import OneVisionProcessor
+from eo.model.modeling_eo1 import EO1VisionFlowMatchingConfig, EO1VisionFlowMatchingModel
+from eo.model.modeling_qwen2_5_vl import Qwen2_5_VLForConditionalGeneration
+from eo.model.processing_eo1 import EO1VisionProcessor
 from eo.train.pipeline_config import TrainPipelineConfig
 from eo.train.train_utils import (
     aggregate_dataset_length,
@@ -25,51 +27,54 @@ from eo.train.train_utils import (
     safe_save_model_for_hf_trainer,
     smart_tokenizer_and_embedding_resize,
 )
-from eo.train.trainer import OneVisionTrainer
+from eo.train.trainer import EO1VisionTrainer
 
 logger = get_logger(__name__, log_level="INFO")
 
 
 def train():
     parser = HfArgumentParser(TrainPipelineConfig)
+
     if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
         (training_args,) = parser.parse_json_file(json_file=os.path.abspath(sys.argv[1]))
     else:
         (training_args,) = parser.parse_args_into_dataclasses()
+
     training_args.output_dir = broadcast_object_list([training_args.output_dir])[0]
     logger.info(f"set output-dir to {training_args.output_dir}")
 
     # configure model
-    compute_dtype = (
-        torch.float16 if training_args.fp16 else (torch.bfloat16 if training_args.bf16 else torch.float32)
-    )
+    compute_dtype = torch.bfloat16 if training_args.bf16 else torch.float32
+
     if training_args.model_name_or_path is None:
-        model = EO1VisionFlowMatchingModel.from_pretrained(
+        config = EO1VisionFlowMatchingConfig.from_pretrained(
             training_args.vlm_name_or_path,
-            build_projector=False,
-            torch_dtype=compute_dtype,
+            dtype=compute_dtype,
             attn_implementation=training_args.attn_implementation,
             action_act=training_args.action_act,
         )
-        model.build_projector(dtype=torch.float32)
+        vlm_backbone = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+            training_args.vlm_name_or_path, dtype=compute_dtype
+        )
+        model = EO1VisionFlowMatchingModel(config, vlm_backbone=vlm_backbone)
     else:
         model = EO1VisionFlowMatchingModel.from_pretrained(
             training_args.model_name_or_path,
-            torch_dtype=compute_dtype,
+            dtype=compute_dtype,
             attn_implementation=training_args.attn_implementation,
         )
 
     # load processor and resize embeddings
-    processor = OneVisionProcessor.from_pretrained(
+    processor = EO1VisionProcessor.from_pretrained(
         training_args.processor_name_or_path,
         padding_side="right",
         use_fast=True,
     )
-    smart_tokenizer_and_embedding_resize(processor, model)
+    smart_tokenizer_and_embedding_resize(processor, model.vlm_backbone)
 
     # configure model
-    configure_llm(model, training_args)
-    configure_vision_tower(model, training_args, compute_dtype, training_args.device)
+    configure_llm(model.vlm_backbone, training_args)
+    configure_vision_tower(model.vlm_backbone, training_args, compute_dtype, training_args.device)
     model.config.action_chunk_size = training_args.chunk_size
 
     # lora peft tuning
@@ -111,7 +116,7 @@ def train():
         main_process_only=True,
     )
 
-    trainer = OneVisionTrainer(model=model, processing_class=processor, args=training_args, **data_module)
+    trainer = EO1VisionTrainer(model=model, processing_class=processor, args=training_args, **data_module)
 
     # aggregate data lengths for packing
     if training_args.pack_dataset:

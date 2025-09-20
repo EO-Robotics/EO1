@@ -36,10 +36,10 @@ class MetaLossesTrainerState(TrainerCallback):
         return control
 
 
-class OneVisionTrainer(Trainer):
-    """Custom Trainer for EOneVision model.
+class EO1VisionTrainer(Trainer):
+    """Custom Trainer for EO1Vision model.
     This class extends the Trainer class from the transformers library to provide
-    additional functionality specific to the EOneVision model.
+    additional functionality specific to the EO1Vision model.
     It includes methods for creating an optimizer with different learning rates for
     different parts of the model, and for handling mixed precision training.
     Args:

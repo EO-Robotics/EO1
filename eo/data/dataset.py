@@ -88,7 +88,7 @@ class MultimodaLeRobotDataset(Dataset):
         if len(data_configs.mm_datasets) > 0:
             mm_dataset = MultimodaDataset(
                 data_configs=data_configs.mm_datasets,
-                max_packed_length=args.max_packed_length,
+                # max_packed_length=args.max_packed_length,
                 max_action_dim=args.max_action_dim,
                 meta_dataset=lerobot_dataset,
                 chunk_size=args.chunk_size,
@@ -326,6 +326,9 @@ class MultimodaLeRobotDataset(Dataset):
 
     def info_qwen_vision_fetch(self):
         from qwen_vl_utils import smart_resize
+
+        if not self.lerobot_dataset:
+            return
 
         print(f"qwen2.5 vl min pixel {self.args.image_min_pixels}, max pixel {self.args.image_max_pixels}")
         for dataset in self.lerobot_dataset._datasets:

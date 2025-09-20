@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
 from typing import Union
 
 import numpy as np
@@ -33,6 +34,8 @@ from transformers.processing_utils import (
 from transformers.tokenization_utils_base import PreTokenizedInput, TextInput
 from transformers.video_utils import VideoInput
 
+os.environ["TOKENIZERS_PARALLELISM"] = "0"
+
 """constants"""
 DEFAULT_IMAGE_TOKEN = "<|image_pad|>"
 DEFAULT_VIDEO_TOKEN = "<|video_pad|>"
@@ -48,6 +51,7 @@ STATE_START_TOKEN = "<|state_start|>"
 DEFAULT_STATE_TOKEN = "<|state_pad|>"
 STATE_END_TOKEN = "<|state_end|>"
 TASK_VLA_TOKEN = "<|vla|>"
+
 
 RobotInput = Union[np.ndarray, "torch.Tensor", list[np.ndarray], list["torch.Tensor"]]
 
@@ -301,7 +305,7 @@ class EO1VisionProcessor(ProcessorMixin):
                 }
             ]
             batch_messages += [messages]
-        return repo_ids, batch_messages, batch_states
+        return batch_messages, batch_states, repo_ids
 
     def _process_robot_outputs(self, repo_ids: list[str], actions: torch.Tensor):
         """Process model outputs back to robot format"""
@@ -319,10 +323,11 @@ class EO1VisionProcessor(ProcessorMixin):
             unnorm_actions = torch.concat([unnorm_actions[k] for k in select_action_keys], -1)
             output_actions.append(unnorm_actions)
         output_actions = torch.stack(output_actions, dim=0)
+        return output_actions
 
     @torch.no_grad
     def select_action(self, model, batch: dict, **kwargs):
-        repo_ids, batch_messages, batch_states = self._prepare_robot_inputs(batch)
+        batch_messages, batch_states, repo_ids = self._prepare_robot_inputs(batch)
 
         noise_prompt = f"{ACTION_START_TOKEN}{DEFAULT_ACTION_TOKEN}{ACTION_END_TOKEN}"
         inputs = self.apply_chat_template(
@@ -335,8 +340,7 @@ class EO1VisionProcessor(ProcessorMixin):
             return_tensors="pt",
         ).to(model.device)
 
-        outputs = model.generate(**inputs, max_new_tokens=128, return_dict_in_generate=True)
-        actions = outputs.actions.cpu()
+        actions = model.sample_actions(**inputs)[0].cpu()
         output_actions = self._process_robot_outputs(repo_ids, actions)
         return BatchFeature({"action": output_actions})
 

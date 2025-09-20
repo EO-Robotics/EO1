@@ -8,30 +8,34 @@ logger = get_logger(__name__, log_level="INFO")
 
 
 def set_requires_grad(parameters, requires_grad):
+    """Set the requires_grad attribute for the parameters."""
     for p in parameters:
         p.requires_grad = requires_grad
 
 
-def configure_vision_tower(model, training_args, compute_dtype, device):
-    vision_tower = model.visual
+def configure_vision_tower(vlm, training_args, compute_dtype, device):
+    """Configure the vision tower."""
+    vision_tower = vlm.visual
     vision_tower.to(dtype=compute_dtype, device=device)
 
-    vision_model_params = model.visual.parameters()
+    vision_model_params = vlm.visual.parameters()
     set_requires_grad(vision_model_params, not training_args.freeze_vision_tower)
 
-    merger_params = model.visual.merger.parameters()
+    merger_params = vlm.visual.merger.parameters()
     set_requires_grad(merger_params, not training_args.freeze_merger)
 
 
-def configure_llm(model, training_args):
-    lm_head = model.lm_head.parameters()
+def configure_llm(vlm, training_args):
+    """Configure the LLM."""
+    lm_head = vlm.lm_head.parameters()
     set_requires_grad(lm_head, not training_args.freeze_llm)
 
-    llm_params = model.model.parameters()
+    llm_params = vlm.model.parameters()
     set_requires_grad(llm_params, not training_args.freeze_llm)
 
 
 def configure_processor(processor, dataset, training_args):
+    """Configure the processor."""
     if training_args.chat_template:
         import json
 
@@ -53,8 +57,9 @@ def configure_processor(processor, dataset, training_args):
 
 def smart_tokenizer_and_embedding_resize(
     processor: transformers.ProcessorMixin,
-    model: transformers.PreTrainedModel,
+    vlm: transformers.PreTrainedModel,
 ):
+    """Smart tokenizer and embedding resize."""
     from eo.constants import (
         ACTION_END_TOKEN,
         ACTION_START_TOKEN,
@@ -82,28 +87,7 @@ def smart_tokenizer_and_embedding_resize(
     ]
     num_new_tokens = tokenizer.add_tokens(eo1_special_tokens, special_tokens=True)
 
-    if num_new_tokens > 0:
-        model.resize_token_embeddings(len(tokenizer))
-        input_embeddings = model.get_input_embeddings().weight.data
-        output_embeddings = model.get_output_embeddings().weight.data
-
-        input_embeddings_avg = input_embeddings[:-num_new_tokens].mean(dim=0, keepdim=True)
-        output_embeddings_avg = output_embeddings[:-num_new_tokens].mean(dim=0, keepdim=True)
-
-        input_embeddings[-num_new_tokens:] = input_embeddings_avg
-        output_embeddings[-num_new_tokens:] = output_embeddings_avg
-        new_token_ids = tokenizer.convert_tokens_to_ids(eo1_special_tokens)
-        logger.warning(
-            f"New tokens {list(zip(eo1_special_tokens, new_token_ids, strict=False))}",
-            main_process_only=True,
-        )
-
-    def set_token_ids(model, tokenizer, token_dict):
-        for key, token in token_dict.items():
-            token_id = tokenizer.convert_tokens_to_ids(token)
-            setattr(model.model.config, key, token_id)
-            setattr(model.config.text_config, key, token_id)
-
+    # NOTE: qwen2.5 vl vocab 151936 > tokenizer 151664 + 8, we don't need to resize embeddings
     token_dict = {
         "state_token_id": DEFAULT_STATE_TOKEN,
         "action_token_start_id": ACTION_START_TOKEN,
@@ -114,13 +98,18 @@ def smart_tokenizer_and_embedding_resize(
         "video_token_id": DEFAULT_VIDEO_TOKEN,
     }
 
-    set_token_ids(model, tokenizer, token_dict)
-    processor.action_token_id = model.model.config.action_token_id
-    processor.action_pass_id = model.model.config.action_pass_id
+    for key, token in token_dict.items():
+        token_id = tokenizer.convert_tokens_to_ids(token)
+        setattr(vlm.model.config, key, token_id)
+        setattr(vlm.config.text_config, key, token_id)
+
+    processor.action_token_id = vlm.model.config.action_token_id
+    processor.action_pass_id = vlm.model.config.action_pass_id
     return num_new_tokens
 
 
 def find_target_linear_names(model, num_lora_modules=-1, lora_namespan_exclude=None, verbose=True):
+    """Find the target linear names for LoRA."""
     if lora_namespan_exclude is None:
         lora_namespan_exclude = []
     linear_cls = torch.nn.modules.Linear
@@ -156,6 +145,7 @@ def safe_save_model_for_hf_trainer(trainer: transformers.Trainer, output_dir: st
 
 
 def aggregate_dataset_length(dataset):
+    """Aggregate the lengths of the dataset, used for dataset packing."""
     import bisect
 
     from torch.utils.data import DataLoader

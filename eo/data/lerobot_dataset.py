@@ -77,7 +77,6 @@ class LeRobotDataset(BaseLeRobotDataset):
         delta_action: bool = False,
         effector_indices: list[int] | None = None,
         weight: float | None = None,
-        chunk_size: int = 32,
     ):
         super().__init__(
             repo_id=repo_id,

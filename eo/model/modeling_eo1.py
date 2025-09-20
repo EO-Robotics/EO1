@@ -21,13 +21,10 @@ import torch.nn as nn
 import torch.nn.functional as F  # noqa: N812
 from torch import Tensor
 from transformers.activations import ACT2FN
+from transformers.generation import GenerationMixin
 from transformers.modeling_outputs import ModelOutput
-from transformers.processing_utils import Unpack
-from transformers.utils import (
-    TransformersKwargs,
-    is_torchdynamo_compiling,
-    logging,
-)
+from transformers.modeling_utils import PreTrainedModel
+from transformers.utils import logging
 
 from .configuration_eo1 import EO1VisionFlowMatchingConfig
 from .modeling_qwen2_5_vl import Qwen2_5_VLForConditionalGeneration
@@ -58,42 +55,19 @@ def create_sinusoidal_pos_embedding(
     return pos_emb
 
 
-def sample_beta(alpha, beta, bsize, device):
-    gamma1 = torch.empty((bsize,), device=device).uniform_(0, 1).pow(1 / alpha)
-    gamma2 = torch.empty((bsize,), device=device).uniform_(0, 1).pow(1 / beta)
-    return gamma1 / (gamma1 + gamma2)
-
-
-def sample_noise(shape, device):
-    noise = torch.normal(
-        mean=0.0,
-        std=1.0,
-        size=shape,
-        dtype=torch.float32,
-        device=device,
-    )
-    return noise
-
-
-def sample_time(bsize, device):
-    time_beta = sample_beta(1.5, 1.0, bsize, device)
-    time = time_beta * 0.999 + 0.001
-    return time.to(dtype=torch.float32, device=device)
-
-
 @dataclass
 class EO1VisionFlowMatchingOutputWithPast(ModelOutput):
     loss: torch.FloatTensor | None = None
     fm_loss: torch.FloatTensor | None = None
     ar_loss: torch.FloatTensor | None = None
-    actions: torch.FloatTensor | None = None
 
+    actions: torch.FloatTensor | None = None
     logits: torch.FloatTensor | None = None
+
     past_key_values: list[torch.FloatTensor] | None = None
     hidden_states: tuple[torch.FloatTensor] | None = None
     attentions: tuple[torch.FloatTensor] | None = None
     rope_deltas: torch.LongTensor | None = None
-    meta_states: torch.FloatTensor | None = None
 
 
 class EO1VisionActionProjector(torch.nn.Sequential):
@@ -124,46 +98,65 @@ class EO1VisionActionProjector(torch.nn.Sequential):
         return self[0].weight.dtype
 
 
-class EO1VisionFlowMatchingModel(Qwen2_5_VLForConditionalGeneration):
+class EO1VisionFlowMatchingModel(PreTrainedModel, GenerationMixin):
     config_class = EO1VisionFlowMatchingConfig
+    supports_gradient_checkpointing = True
+
+    _supports_flash_attn = True
+    _supports_sdpa = True
+    _supports_attention_backend = True
+    _can_compile_fullgraph = True
+    _skip_keys_device_placement = "past_key_values"
 
     def __init__(
         self,
         config: EO1VisionFlowMatchingConfig,
-        build_projector: bool = True,
+        vlm_backbone: Qwen2_5_VLForConditionalGeneration = None,
     ):
         super().__init__(config)
-        if build_projector:
-            self.build_projector()
 
-    def build_projector(self, dtype=None, device=None):
-        device = device or self.device
-        dtype = dtype or self.dtype
         hidden_size = self.config.text_config.hidden_size
         max_action_dim = self.config.max_action_dim
-        self.state_proj = nn.Linear(max_action_dim, hidden_size).to(dtype=dtype, device=device)
-        self.action_in_proj = nn.Linear(max_action_dim, hidden_size).to(dtype=dtype, device=device)
+        self.vlm_backbone = vlm_backbone or Qwen2_5_VLForConditionalGeneration(self.config)
+        self.state_proj = nn.Linear(max_action_dim, hidden_size)
+        self.action_in_proj = nn.Linear(max_action_dim, hidden_size)
         self.action_out_proj = EO1VisionActionProjector(
             hidden_size,
             max_action_dim,
             self.config.num_action_layers,
             self.config.action_act,
-            dtype=dtype,
+        )
+        self.action_time_mlp_in = nn.Linear(hidden_size * 2, hidden_size)
+        self.action_time_mlp_out = nn.Linear(hidden_size, hidden_size)
+
+        self.post_init()
+        self.to_float32_flow_matching_head()
+
+    def get_input_embeddings(self):
+        return self.vlm_backbone.get_input_embeddings()
+
+    def to_float32_flow_matching_head(self):
+        self.action_out_proj = self.action_out_proj.to(dtype=torch.float32)
+        self.action_time_mlp_in = self.action_time_mlp_in.to(dtype=torch.float32)
+        self.action_time_mlp_out = self.action_time_mlp_out.to(dtype=torch.float32)
+        self.state_proj = self.state_proj.to(dtype=torch.float32)
+        self.action_in_proj = self.action_in_proj.to(dtype=torch.float32)
+
+    def sample_noise(self, shape, device):
+        noise = torch.normal(
+            mean=0.0,
+            std=1.0,
+            size=shape,
+            dtype=torch.float32,
             device=device,
         )
-        self.action_time_mlp_in = nn.Linear(hidden_size * 2, hidden_size).to(dtype=dtype, device=device)
-        self.action_time_mlp_out = nn.Linear(hidden_size, hidden_size).to(dtype=dtype, device=device)
+        return noise
 
-    def _has_action_gen_seq(
-        self,
-        input_ids: torch.LongTensor = None,
-    ):
-        """Check if the input_ids has action generation sequence."""
-        if input_ids is None:
-            return False, None
-        action_token_id = self.config.text_config.action_token_id
-        mask = input_ids == action_token_id
-        return mask.any()
+    def sample_time(self, bsize, device):
+        beta_dist = torch.distributions.Beta(concentration1=1.5, concentration0=1.0)
+        time_beta = beta_dist.sample((bsize,)).to(device=device, dtype=torch.float32)
+        time = time_beta * 0.999 + 0.001
+        return time
 
     def replace_special_embeddings(
         self,
@@ -188,6 +181,66 @@ class EO1VisionFlowMatchingModel(Qwen2_5_VLForConditionalGeneration):
             inputs_embeds = inputs_embeds.masked_scatter(special_mask, special_features)
         return inputs_embeds, None
 
+    def embed_prefix(
+        self,
+        input_ids: torch.LongTensor,
+        inputs_embeds: torch.FloatTensor | None = None,
+        pixel_values: torch.Tensor | None = None,
+        pixel_values_videos: torch.FloatTensor | None = None,
+        image_grid_thw: torch.LongTensor | None = None,
+        video_grid_thw: torch.LongTensor | None = None,
+        states: torch.Tensor | None = None,
+    ) -> tuple[torch.FloatTensor, torch.Tensor, torch.Tensor]:
+        """Embed the suffix"""
+        if inputs_embeds is None:
+            inputs_embeds = self.get_input_embeddings()(input_ids)
+
+        if pixel_values is not None:
+            image_embeds = self.vlm_backbone.get_image_features(pixel_values, image_grid_thw)
+            image_embeds = torch.cat(image_embeds, dim=0).to(inputs_embeds.device, inputs_embeds.dtype)
+            image_mask, _ = self.vlm_backbone.get_placeholder_mask(
+                input_ids, inputs_embeds=inputs_embeds, image_features=image_embeds
+            )
+            inputs_embeds = inputs_embeds.masked_scatter(image_mask, image_embeds)
+
+        if pixel_values_videos is not None:
+            video_embeds = self.vlm_backbone.get_video_features(pixel_values_videos, video_grid_thw)
+            video_embeds = torch.cat(video_embeds, dim=0).to(inputs_embeds.device, inputs_embeds.dtype)
+            _, video_mask = self.vlm_backbone.get_placeholder_mask(
+                input_ids, inputs_embeds=inputs_embeds, video_features=video_embeds
+            )
+            inputs_embeds = inputs_embeds.masked_scatter(video_mask, video_embeds)
+
+        if states is not None:
+            states = states.type(self.state_proj.weight.dtype)
+            state_embs = self.state_proj(states)
+            inputs_embeds, _ = self.replace_special_embeddings(
+                input_ids, inputs_embeds, state_embs, self.config.state_token_id
+            )
+        return inputs_embeds
+
+    def embed_suffix(
+        self,
+        timestep: torch.Tensor,
+        noisy_actions: torch.Tensor,
+    ) -> torch.FloatTensor:
+        """Embed the suffix"""
+        time_embs = create_sinusoidal_pos_embedding(
+            timestep,
+            self.config.text_config.hidden_size,
+            device=noisy_actions.device,
+        )
+        time_embs = time_embs.type(noisy_actions.dtype)
+        noisy_actions = noisy_actions.type(self.action_in_proj.weight.dtype)
+        action_embs = self.action_in_proj(noisy_actions)
+        time_embs = time_embs[:, None, :].expand_as(action_embs)
+
+        action_time_embs = torch.cat([action_embs, time_embs], dim=2)
+        action_time_embs = self.action_time_mlp_in(action_time_embs)
+        action_time_embs = F.silu(action_time_embs)
+        action_time_embs = self.action_time_mlp_out(action_time_embs)
+        return action_time_embs
+
     def forward(
         self,
         input_ids: torch.LongTensor | None = None,
@@ -210,78 +263,37 @@ class EO1VisionFlowMatchingModel(Qwen2_5_VLForConditionalGeneration):
         states: torch.Tensor | None = None,
         actions: torch.Tensor | None = None,
         action_is_pad: torch.Tensor | None = None,
-        **kwargs: Unpack[TransformersKwargs],
-    ) -> tuple | EO1VisionFlowMatchingOutputWithPast:
-        output_attentions = (
-            output_attentions if output_attentions is not None else self.config.output_attentions
+        **kwargs,
+    ) -> EO1VisionFlowMatchingOutputWithPast:
+        """multi-modal forward pass, including image, video, state, action, and language."""
+
+        inputs_embeds = self.embed_prefix(
+            input_ids,
+            inputs_embeds,
+            pixel_values,
+            pixel_values_videos,
+            image_grid_thw,
+            video_grid_thw,
+            states,
         )
-        output_hidden_states = (
-            output_hidden_states if output_hidden_states is not None else self.config.output_hidden_states
-        )
-        if inputs_embeds is None:
-            inputs_embeds = self.get_input_embeddings()(input_ids)
-
-        if pixel_values is not None:
-            image_embeds = self.get_image_features(pixel_values, image_grid_thw)
-            image_embeds = torch.cat(image_embeds, dim=0).to(inputs_embeds.device, inputs_embeds.dtype)
-            image_mask, _ = self.get_placeholder_mask(
-                input_ids, inputs_embeds=inputs_embeds, image_features=image_embeds
-            )
-            inputs_embeds = inputs_embeds.masked_scatter(image_mask, image_embeds)
-
-        if pixel_values_videos is not None:
-            video_embeds = self.get_video_features(pixel_values_videos, video_grid_thw)
-            video_embeds = torch.cat(video_embeds, dim=0).to(inputs_embeds.device, inputs_embeds.dtype)
-            _, video_mask = self.get_placeholder_mask(
-                input_ids, inputs_embeds=inputs_embeds, video_features=video_embeds
-            )
-            inputs_embeds = inputs_embeds.masked_scatter(video_mask, video_embeds)
-
-        if states is not None:
-            states = states.type(self.state_proj.weight.dtype)
-            state_embs = self.state_proj(states)
-            inputs_embeds, _ = self.replace_special_embeddings(
-                input_ids, inputs_embeds, state_embs, self.config.text_config.state_token_id
-            )
 
         if actions is not None:
-            noise_mask = input_ids == self.config.text_config.action_token_id
-            pass_mask = input_ids == self.config.text_config.action_pass_id
+            noise_mask = input_ids == self.config.action_token_id
+            pass_mask = input_ids == self.config.action_pass_id
             mask = noise_mask | pass_mask  # (b s)
 
             pass_mask_in_action = pass_mask[mask]  # (n, )
             pass_mask_in_action = pass_mask_in_action.reshape(*actions.shape[:2], 1)  # (b, h, 1)
 
-            time = sample_time(actions.shape[0], inputs_embeds.device)  # (n,)
+            time = self.sample_time(actions.shape[0], inputs_embeds.device)  # (n,)
             time_expanded = time[:, None, None].repeat(1, actions.shape[1], 1)  # (b, h, 1)
             time_expanded[pass_mask_in_action] = 0.0
 
-            noise = sample_noise(actions.shape, inputs_embeds.device)
+            noise = self.sample_noise(actions.shape, inputs_embeds.device)
             x_t = time_expanded * noise + (1 - time_expanded) * actions
             u_t = noise - actions
 
-            time_embs = create_sinusoidal_pos_embedding(
-                time,
-                self.config.text_config.hidden_size,
-                device=inputs_embeds.device,
-            )
-            time_embs = time_embs.type(inputs_embeds.dtype)
-
-            x_t = x_t.type(self.action_in_proj.weight.dtype)
-            action_embs = self.action_in_proj(x_t)
-            time_embs = time_embs[:, None, :].expand_as(action_embs)
-
-            action_time_embs = torch.cat([action_embs, time_embs], dim=2)
-            action_time_embs = self.action_time_mlp_in(action_time_embs)
-            action_time_embs = F.silu(action_time_embs)
-            action_time_embs = self.action_time_mlp_out(action_time_embs)
-
-            num_actions = mask.sum().item()
-            num_action_features = action_time_embs.shape[0] * action_time_embs.shape[1]
-            assert num_actions == num_action_features, (
-                f"action features and tokens do not match: {num_actions=}, {num_action_features=}"
-            )
-
+            action_time_embs = self.embed_suffix(time, x_t)
             mask_unsqueezed = mask.unsqueeze(-1)
             mask_expanded = mask_unsqueezed.expand_as(inputs_embeds)
             action_mask = mask_expanded.to(inputs_embeds.device)
@@ -289,67 +301,62 @@ class EO1VisionFlowMatchingModel(Qwen2_5_VLForConditionalGeneration):
             action_time_embs = action_time_embs.to(inputs_embeds.device, inputs_embeds.dtype)
             inputs_embeds = inputs_embeds.masked_scatter(action_mask, action_time_embs)
 
-            if attention_mask is not None:
-                attention_mask = attention_mask.to(inputs_embeds.device)
+        if attention_mask is not None:
+            attention_mask = attention_mask.to(inputs_embeds.device)
 
         if position_ids is None:
-            prefill_compiled_stage = is_torchdynamo_compiling() and (
-                (input_ids is not None and input_ids.shape[1] != 1)
-                or (inputs_embeds is not None and inputs_embeds.shape[1] != 1)
+            prefill_noncompiled_stage = (cache_position is not None and cache_position[0] == 0) or (
+                past_key_values is None or past_key_values.get_seq_length() == 0
             )
-            prefill_noncompiled_stage = not is_torchdynamo_compiling() and (
-                (cache_position is not None and cache_position[0] == 0)
-                or (past_key_values is None or past_key_values.get_seq_length() == 0)
-            )
-            if (prefill_compiled_stage or prefill_noncompiled_stage) or self.rope_deltas is None:
-                position_ids, rope_deltas = self.get_rope_index(
+            if prefill_noncompiled_stage or self.vlm_backbone.rope_deltas is None:
+                position_ids, rope_deltas = self.vlm_backbone.get_rope_index(
                     input_ids,
                     image_grid_thw,
                     video_grid_thw,
                     second_per_grid_ts=second_per_grid_ts,
                     attention_mask=attention_mask,
                 )
-                self.rope_deltas = rope_deltas
+                self.vlm_backbone.rope_deltas = rope_deltas
             else:
                 batch_size, seq_length, _ = inputs_embeds.shape
                 position_ids = torch.arange(seq_length, device=inputs_embeds.device)
                 position_ids = position_ids.view(1, 1, -1).expand(3, batch_size, -1)
                 if cache_position is not None:
-                    delta = (cache_position[0] + self.rope_deltas).to(inputs_embeds.device)
+                    delta = (cache_position[0] + self.vlm_backbone.rope_deltas).to(inputs_embeds.device)
                 else:
                     delta = torch.zeros((batch_size, seq_length), device=inputs_embeds.device)
                 delta = delta.repeat_interleave(batch_size // delta.shape[0], dim=1)
                 position_ids += delta.to(position_ids.device)
 
-        model_kwargs = {
-            "position_ids": position_ids,
-            "attention_mask": attention_mask,
-            "past_key_values": past_key_values,
-            "inputs_embeds": inputs_embeds,
-            "use_cache": False if self.training else use_cache,
-            "output_attentions": output_attentions,
-            "output_hidden_states": output_hidden_states,
-            "return_dict": True,
-            "cache_position": cache_position,
-        }
-
-        _actions = None
-        if not (self.training or states is None) and actions is None and self._has_action_gen_seq(input_ids):
-            # action sampling
-            _actions, outputs = self._sample_actions(input_ids=input_ids, **model_kwargs)
-            logits = torch.zeros(
-                inputs_embeds.shape[0], 1, self.config.text_config.vocab_size, device=inputs_embeds.device
+        # generation
+        output_actions = None
+        if not (self.training or states is None):
+            output_actions, outputs = self.sample_actions(
+                input_ids=input_ids,
+                position_ids=position_ids,
+                attention_mask=attention_mask,
+                past_key_values=past_key_values,
+                inputs_embeds=inputs_embeds,
+                cache_position=cache_position,
             )
-            logits[..., self.config.text_config.eos_token_id] = 33.8125  # <|im_end|>
         else:
-            # text generation
-            outputs = self.model(**model_kwargs)
-            hidden_states = outputs[0]
-            # only compute necessary logits, do not upcast to float if not computing loss
-            slice_indices = (
-                slice(-logits_to_keep, None) if isinstance(logits_to_keep, int) else logits_to_keep
+            outputs = self.vlm_backbone.model(
+                position_ids=position_ids,
+                attention_mask=attention_mask,
+                past_key_values=past_key_values,
+                inputs_embeds=inputs_embeds,
+                use_cache=use_cache,
+                output_attentions=output_attentions,
+                output_hidden_states=output_hidden_states,
+                return_dict=True,
+                cache_position=cache_position,
             )
-            logits = self.lm_head(hidden_states[:, slice_indices, :])
+
+        hidden_states = outputs[0]
+
+        # only compute necessary logits, do not upcast to float if not computing loss
+        slice_indices = slice(-logits_to_keep, None) if isinstance(logits_to_keep, int) else logits_to_keep
+        logits = self.vlm_backbone.lm_head(hidden_states[:, slice_indices, :])
 
         loss = None
         fm_loss = None
@@ -369,12 +376,13 @@ class EO1VisionFlowMatchingModel(Qwen2_5_VLForConditionalGeneration):
 
             in_denoise_bound = (~pass_mask_in_action).reshape(-1, 1)
             losses = losses * in_denoise_bound
+
             fm_loss = losses.mean()
             loss = fm_loss
 
         ar_loss = None
         if labels is not None:
-            ar_loss = self.loss_function(
+            ar_loss = self.vlm_backbone.loss_function(
                 logits=logits, labels=labels, vocab_size=self.config.text_config.vocab_size, **kwargs
             )
             loss = loss + ar_loss if loss is not None else ar_loss
@@ -383,108 +391,105 @@ class EO1VisionFlowMatchingModel(Qwen2_5_VLForConditionalGeneration):
             loss=loss,
             fm_loss=fm_loss,
             ar_loss=ar_loss,
-            actions=_actions,
+            actions=output_actions,
             logits=logits,
             past_key_values=outputs.past_key_values,
             hidden_states=outputs.hidden_states,
             attentions=outputs.attentions,
-            rope_deltas=self.rope_deltas,
+            rope_deltas=self.vlm_backbone.rope_deltas,
         )
 
     @torch.no_grad()
-    def _sample_actions(
+    def sample_actions(
         self,
         input_ids: torch.LongTensor | None = None,
         position_ids: torch.LongTensor | None = None,
         attention_mask: torch.Tensor | None = None,
         past_key_values: list[torch.FloatTensor] | None = None,
         inputs_embeds: torch.FloatTensor | None = None,
-        use_cache: bool | None = None,
-        output_attentions: bool | None = None,
-        output_hidden_states: bool | None = None,
-        return_dict: bool | None = None,
         cache_position: torch.LongTensor | None = None,
+        pixel_values: torch.Tensor | None = None,
+        image_grid_thw: torch.LongTensor | None = None,
+        states: torch.Tensor | None = None,
+        **kwargs,
     ) -> Tensor:
-        """Sample actions from the model, break down into 3 steps to make a unified generation interface:
-        input_ids:
-        <|im_start|>user<|vision_start|><|image_pad|>...<|vision_end|><|state_start|><|state_pad|><|state_end|>task...<|vla|><|im_end|> -> AR kvcache
-        <|im_start|>assistant<|action_start|><|action_pad|>...<|action_end|> -> FM denoising
-        <|im_end|> -> AR
-        """
-        chunksz_eoa = self.config.action_chunk_size + 1
+        """Sample actions from the model."""
 
-        # 1. pass the mm prefix to the model, and update kvcache
-        mm_outputs = self.model(
-            position_ids=position_ids[..., :-chunksz_eoa],
-            attention_mask=attention_mask[:, :-chunksz_eoa],
+        # prepare position_ids and kv_cache
+        if position_ids is None:
+            position_ids, _ = self.vlm_backbone.get_rope_index(
+                input_ids,
+                image_grid_thw=image_grid_thw,
+                attention_mask=attention_mask,
+            )
+
+        # embed prefix
+        if inputs_embeds is None:
+            inputs_embeds = self.embed_prefix(
+                input_ids,
+                pixel_values=pixel_values,
+                image_grid_thw=image_grid_thw,
+                states=states,
+            )
+
+        # pass prefix, update kvcache
+        seq_len = input_ids.shape[-1]
+        suffix_len = -1  # exclude <|action_end|>
+        prefix_len = seq_len - self.config.action_chunk_size - 1
+
+        outputs = self.vlm_backbone.model(
+            position_ids=position_ids[..., :prefix_len],
+            attention_mask=attention_mask[:, :prefix_len],
             past_key_values=past_key_values,
-            inputs_embeds=inputs_embeds[:, :-chunksz_eoa],
-            use_cache=use_cache,
-            cache_position=cache_position[:-chunksz_eoa],
+            inputs_embeds=inputs_embeds[:, :prefix_len],
+            use_cache=True,
+            cache_position=cache_position[:-prefix_len] if cache_position is not None else None,
         )
 
-        # 2. perform denoising steps, with noise q and mm kvcache
-        device = inputs_embeds.device
-        x_t = sample_noise(
-            [
-                inputs_embeds.shape[0],
-                self.config.action_chunk_size,
-                self.config.max_action_dim,
-            ],
-            device,
-        )
-        x_t = x_t.type(self.action_in_proj.weight.dtype)
+        # denoising
+        device = states.device
+        actions_shape = (states.shape[0], self.config.action_chunk_size, self.config.max_action_dim)
+        noise = self.sample_noise(actions_shape, device)
 
+        x_t = noise.type(self.action_in_proj.weight.dtype)
         dt = torch.tensor(-1.0 / self.config.num_denoise_steps, device=device)
         time = torch.ones(inputs_embeds.shape[0], device=device)
-        pass_seq_length = past_key_values.get_seq_length()
+        past_key_values, past_hidden_state = outputs.past_key_values, outputs.last_hidden_state
 
-        action_mask = input_ids == self.config.text_config.action_token_id
+        action_mask = input_ids == self.config.action_token_id
         while time >= -dt / 2:
-            time_embs = create_sinusoidal_pos_embedding(
-                time,
-                self.config.text_config.hidden_size,
-                device=device,
-            )
-            time_embs = time_embs.type(inputs_embeds.dtype)
-            action_embs = self.action_in_proj(x_t)
-            time_embs = time_embs[:, None, :].expand_as(action_embs)
+            action_time_embs = self.embed_suffix(time, x_t)
+            inputs_embeds[action_mask] = action_time_embs.to(inputs_embeds.dtype)
 
-            action_time_embs = torch.cat([action_embs, time_embs], dim=2)
-            action_time_embs = self.action_time_mlp_in(action_time_embs)
-            action_time_embs = F.silu(action_time_embs)
-            action_time_embs = self.action_time_mlp_out(action_time_embs)
-            action_time_embs = action_time_embs.to(device, inputs_embeds.dtype)
-            inputs_embeds[action_mask] = action_time_embs
+            past_key_values.crop(prefix_len)
 
-            past_key_values.crop(pass_seq_length)
-            outputs = self.model(
-                position_ids=position_ids[..., -chunksz_eoa:],
-                attention_mask=attention_mask,
+            outputs = self.vlm_backbone.model(
+                position_ids=position_ids[..., prefix_len:suffix_len],
+                attention_mask=attention_mask[:, :suffix_len],
                 past_key_values=past_key_values,
-                inputs_embeds=inputs_embeds[:, -chunksz_eoa:],
-                use_cache=use_cache,
-                output_attentions=output_attentions,
-                output_hidden_states=output_hidden_states,
-                return_dict=return_dict,
-                cache_position=cache_position[-chunksz_eoa:],
+                inputs_embeds=inputs_embeds[:, prefix_len:suffix_len],
+                use_cache=True,
+                cache_position=cache_position[prefix_len:suffix_len] if cache_position is not None else None,
             )
-
-            hidden_states = outputs[0]
-            action_time_embs = hidden_states[:, :-1]  # exclude <eoa>
+            action_time_embs = outputs.last_hidden_state[:, : self.config.action_chunk_size]
             action_time_embs = action_time_embs.type(self.action_out_proj.dtype)
             v_t = self.action_out_proj(action_time_embs)
 
-            # euler step
             x_t += dt * v_t.reshape(x_t.shape)
             time += dt
 
-        # 3. get the final EOS token logits
+            # last step
+            if time < -dt * 3 / 2:
+                suffix_len = seq_len
 
-        outputs.last_hidden_state = torch.cat(
-            [mm_outputs.last_hidden_state, outputs.last_hidden_state], dim=1
-        )
-        return (x_t, outputs)
+        outputs.last_hidden_state = torch.cat([past_hidden_state, outputs.last_hidden_state], dim=1)
+        return x_t, outputs
+
+    def prepare_inputs_for_generation(self, *args, **kwargs):
+        return self.vlm_backbone.prepare_inputs_for_generation(*args, **kwargs)
+
+    def _expand_inputs_for_generation(self, *args, **kwargs):
+        return self.vlm_backbone._expand_inputs_for_generation(*args, **kwargs)
 
 
 EO1VisionFlowMatchingModel.register_for_auto_class()

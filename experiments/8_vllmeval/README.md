@@ -25,7 +25,7 @@ These benchmarks test the model's ability to:
 # 1. Download model and datasets
 bash experiments/8_vllmeval/download_all.sh
 
-# 2. Install VLMEvalKit
+# 2. Install VLMEvalKit, TODO: pr to VLMEvalKit to add EO-1-3B model @ Xianqiang Gao
 git clone https://github.com/DelinQu/VLMEvalKit
 cd VLMEvalKit
 pip install -e .

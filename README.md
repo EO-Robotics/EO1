@@ -82,7 +82,7 @@ pip install --upgrade setuptools
 # install flash-attn 2
 MAX_JOBS=4 pip install flash-attn==2.8.3 --no-build-isolation
 
-# [recommended] install from source with H100 / H800 GPU, CUDA 12.8 for best performance
+# [recommended] ⭐️ install flash-attn 3 from source with H100 / H800 GPU, CUDA 12.8 for best performance
 # git clone https://github.com/Dao-AILab/flash-attn.git -b v2.8.3 --recursive --depth 1
 # cd hopper && python setup.py install
 
@@ -308,6 +308,7 @@ Robot Control Benchmark Results
 ## 📅 Roadmap
 
 - [x] 🤖 Release [EO-1](https://huggingface.co/IPEC-COMMUNITY/EO-1-3B) pretraining, finetune scripts, and documentations.
+- [x] Integrate into [LERobot](https://github.com/huggingface/lerobot). We have merged the [PR](https://github.com/huggingface/lerobot/pull/1971) into the main branch. You can now use EO-1 with LERobot without any modifications.
 - [ ] 🤗 Release [pre-training models](https://huggingface.co/collections/IPEC-COMMUNITY/eo-robotics-68ac4ff30e1f746cac28ca14), Interleaved Dataset `EO-Data1.5M` and benchmark `EO-Bench`.
 - [ ] ⚡️ Efficient LLM Inference over Long Sequences, Efficient KV-cache, etc.
 - [ ] 🤖 Integrate with human feedback fine-tuning.

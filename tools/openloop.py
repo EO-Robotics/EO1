@@ -7,9 +7,10 @@ from lerobot.datasets.lerobot_dataset import LeRobotDatasetMetadata
 from lerobot.policies.normalize import Unnormalize
 from PIL import Image
 from tqdm import tqdm
-from transformers import AutoModel, AutoProcessor
+from transformers import AutoModel
 
 from eo.data.lerobot_dataset import LeRobotDataset
+from eo.model.processing_eo1 import EO1VisionProcessor
 
 argparser = argparse.ArgumentParser()
 argparser.add_argument("--repo_id", type=str, default="libero_spatial_no_noops_1.0.0_lerobot", help="repo id")
@@ -17,7 +18,7 @@ argparser.add_argument("--root", type=str, default="./demo_data", help="root pat
 argparser.add_argument(
     "--model_path",
     type=str,
-    default="outputs/2025-09-13/17-50-05-data-libero_ck8_gpu8_lr1e-4_vlr2e-5_mlr1e-4_bs256",
+    default="path/to/your/model",
     help="model path",
 )
 argparser.add_argument("--num_step", type=int, default=10, help="model path")
@@ -28,13 +29,15 @@ args = argparser.parse_args()
 num_step = args.num_step
 
 # load models and set keys
-processor = AutoProcessor.from_pretrained(args.model_path, trust_remote_code=True)
+# processor = AutoProcessor.from_pretrained(args.model_path, trust_remote_code=True)
+
+processor = EO1VisionProcessor.from_pretrained(args.model_path, trust_remote_code=True)
 model = AutoModel.from_pretrained(args.model_path, trust_remote_code=True, dtype=torch.bfloat16).eval().cuda()
 action_horizon = processor.robot_config.get("action_chunk_size", 50)
 
-select_video_keys = processor.select_video_keys[args.repo_id]
-select_state_keys = processor.select_state_keys[args.repo_id]
-select_action_keys = processor.select_action_keys[args.repo_id]
+select_video_keys = processor.robot_config["select_video_keys"][args.repo_id]
+select_state_keys = processor.robot_config["select_state_keys"][args.repo_id]
+select_action_keys = processor.robot_config["select_action_keys"][args.repo_id]
 state_mode = processor.robot_config["state_mode"]
 
 # load dataset
