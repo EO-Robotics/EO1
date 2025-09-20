@@ -1,3 +1,9 @@
 [submodule "experiments/7_franka/deoxys_control"]
 	path = experiments/7_franka/deoxys_control
 	url = https://github.com/UT-Austin-RPL/deoxys_control.git
+[submodule "experiments/5_widowx/bridge_data_robot"]
+	path = experiments/5_widowx/bridge_data_robot
+	url = https://github.com/HaomingSong/bridge_data_robot.git
+[submodule "experiments/5_widowx/edgeml"]
+	path = experiments/5_widowx/edgeml
+	url = https://github.com/youliangtan/edgeml.git
