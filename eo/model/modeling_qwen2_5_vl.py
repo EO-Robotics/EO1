@@ -24,14 +24,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from dataclasses import dataclass
-from typing import Any, Optional, Union
 from collections.abc import Callable
+from dataclasses import dataclass
+from typing import Any, Optional
 
 import torch
 import torch.nn as nn
 import torch.nn.functional as F  # noqa: N812
-from transformers.models.qwen2_5_vl.configuration_qwen2_5_vl import Qwen2_5_VLConfig, Qwen2_5_VLTextConfig, Qwen2_5_VLVisionConfig
 from transformers.activations import ACT2FN
 from transformers.cache_utils import Cache, DynamicCache
 from transformers.generation import GenerationMixin
@@ -47,8 +46,13 @@ from transformers.modeling_layers import GradientCheckpointingLayer
 from transformers.modeling_outputs import BaseModelOutputWithPast, ModelOutput
 from transformers.modeling_rope_utils import ROPE_INIT_FUNCTIONS, dynamic_rope_update
 from transformers.modeling_utils import ALL_ATTENTION_FUNCTIONS, PreTrainedModel
-from transformers.processing_utils import Unpack
 from transformers.models.qwen2.modeling_qwen2 import Qwen2RMSNorm
+from transformers.models.qwen2_5_vl.configuration_qwen2_5_vl import (
+    Qwen2_5_VLConfig,
+    Qwen2_5_VLTextConfig,
+    Qwen2_5_VLVisionConfig,
+)
+from transformers.processing_utils import Unpack
 from transformers.utils import (
     TransformersKwargs,
     auto_docstring,
@@ -665,9 +669,8 @@ class Qwen2_5_VLAttention(nn.Module):
         output_attentions: bool = False,
         use_cache: bool = False,
         cache_position: torch.LongTensor | None = None,
-        position_embeddings: None | (
-            tuple[torch.Tensor, torch.Tensor]
-        ) = None,  # necessary, but kept here for BC
+        position_embeddings: None
+        | (tuple[torch.Tensor, torch.Tensor]) = None,  # necessary, but kept here for BC
         **kwargs: Unpack[FlashAttentionKwargs],
     ) -> tuple[torch.Tensor, torch.Tensor | None, tuple[torch.Tensor] | None]:
         bsz, q_len, _ = hidden_states.size()
@@ -744,9 +747,8 @@ class Qwen2_5_VLDecoderLayer(GradientCheckpointingLayer):
         output_attentions: bool | None = False,
         use_cache: bool | None = False,
         cache_position: torch.LongTensor | None = None,
-        position_embeddings: None | (
-            tuple[torch.Tensor, torch.Tensor]
-        ) = None,  # necessary, but kept here for BC
+        position_embeddings: None
+        | (tuple[torch.Tensor, torch.Tensor]) = None,  # necessary, but kept here for BC
         **kwargs: Unpack[FlashAttentionKwargs],
     ) -> tuple[torch.FloatTensor, tuple[torch.FloatTensor, torch.FloatTensor] | None]:
         """
@@ -1340,7 +1342,6 @@ class Qwen2_5_VLForConditionalGeneration(Qwen2_5_VLPreTrainedModel, GenerationMi
         second_per_grid_ts (`torch.Tensor` of shape `(num_videos)`, *optional*):
             The time interval (in seconds) for each grid along the temporal dimension in the 3D position IDs.
         ```"""
-
         output_attentions = (
             output_attentions if output_attentions is not None else self.config.output_attentions
         )
@@ -1452,7 +1453,6 @@ class Qwen2_5_VLForConditionalGeneration(Qwen2_5_VLPreTrainedModel, GenerationMi
         **kwargs,
     ):
         # Overwritten -- in specific circumstances we don't want to forward image inputs to the model
-
         model_inputs = super().prepare_inputs_for_generation(
             input_ids,
             past_key_values=past_key_values,
@@ -1475,7 +1475,7 @@ class Qwen2_5_VLForConditionalGeneration(Qwen2_5_VLPreTrainedModel, GenerationMi
             # When compiling, we can't check tensor values thus we check only input length
             # It is safe to assume that `length!=1` means we're in pre-fill because compiled
             # models currently cannot do asssisted decoding
-            if cache_position[0] == 0 or self.model.rope_deltas is None:
+            if cache_position[0] == 0 or self.rope_deltas is None:
                 vision_positions, rope_deltas = self.get_rope_index(
                     model_inputs.get("input_ids", None),
                     image_grid_thw=image_grid_thw,
@@ -1483,11 +1483,11 @@ class Qwen2_5_VLForConditionalGeneration(Qwen2_5_VLPreTrainedModel, GenerationMi
                     second_per_grid_ts=second_per_grid_ts,
                     attention_mask=attention_mask,
                 )
-                self.model.rope_deltas = rope_deltas
+                self.rope_deltas = rope_deltas
             # then use the prev pre-calculated rope-deltas to get the correct position ids
             elif "position_ids" in model_inputs:
                 position_ids = model_inputs["position_ids"][None, ...]
-                delta = self.model.rope_deltas
+                delta = self.rope_deltas
                 delta = delta.repeat_interleave(position_ids.shape[1] // delta.shape[0], dim=0)
                 vision_positions = position_ids + delta.expand_as(position_ids)
                 vision_positions = vision_positions.expand(3, vision_positions.shape[1], -1)
