@@ -338,6 +338,7 @@ class EO1VisionFlowMatchingModel(PreTrainedModel, GenerationMixin):
                 past_key_values=past_key_values,
                 inputs_embeds=inputs_embeds,
                 cache_position=cache_position,
+                states=states,
             )
         else:
             outputs = self.vlm_backbone.model(
@@ -434,21 +435,25 @@ class EO1VisionFlowMatchingModel(PreTrainedModel, GenerationMixin):
 
         # pass prefix, update kvcache
         seq_len = input_ids.shape[-1]
+        chunk_size = self.config.action_chunk_size
         suffix_len = -1  # exclude <|action_end|>
-        prefix_len = seq_len - self.config.action_chunk_size - 1
+        prefix_len = seq_len - chunk_size - 1
+
+        cache_seq_len = attention_mask.shape[-1]
+        cache_prefix_len = cache_seq_len - chunk_size - 1
 
         outputs = self.vlm_backbone.model(
             position_ids=position_ids[..., :prefix_len],
-            attention_mask=attention_mask[:, :prefix_len],
+            attention_mask=attention_mask[:, :cache_prefix_len],
             past_key_values=past_key_values,
             inputs_embeds=inputs_embeds[:, :prefix_len],
             use_cache=True,
-            cache_position=cache_position[:-prefix_len] if cache_position is not None else None,
+            cache_position=cache_position[:prefix_len] if cache_position is not None else None,
         )
 
         # denoising
         device = states.device
-        actions_shape = (states.shape[0], self.config.action_chunk_size, self.config.max_action_dim)
+        actions_shape = (states.shape[0], chunk_size, self.config.max_action_dim)
         noise = self.sample_noise(actions_shape, device)
 
         x_t = noise.type(self.action_in_proj.weight.dtype)
@@ -461,7 +466,7 @@ class EO1VisionFlowMatchingModel(PreTrainedModel, GenerationMixin):
             action_time_embs = self.embed_suffix(time, x_t)
             inputs_embeds[action_mask] = action_time_embs.to(inputs_embeds.dtype)
 
-            past_key_values.crop(prefix_len)
+            past_key_values.crop(cache_prefix_len)
 
             outputs = self.vlm_backbone.model(
                 position_ids=position_ids[..., prefix_len:suffix_len],
@@ -471,7 +476,7 @@ class EO1VisionFlowMatchingModel(PreTrainedModel, GenerationMixin):
                 use_cache=True,
                 cache_position=cache_position[prefix_len:suffix_len] if cache_position is not None else None,
             )
-            action_time_embs = outputs.last_hidden_state[:, : self.config.action_chunk_size]
+            action_time_embs = outputs.last_hidden_state[:, :chunk_size]
             action_time_embs = action_time_embs.type(self.action_out_proj.dtype)
             v_t = self.action_out_proj(action_time_embs)
 
@@ -480,8 +485,7 @@ class EO1VisionFlowMatchingModel(PreTrainedModel, GenerationMixin):
 
             # last step
             if time < -dt * 3 / 2:
-                suffix_len = seq_len
-
+                suffix_len = cache_seq_len
         outputs.last_hidden_state = torch.cat([past_hidden_state, outputs.last_hidden_state], dim=1)
         return x_t, outputs
 
