@@ -17,7 +17,7 @@ epoch=10
 model_name_or_path=
 run_name=${dataset_name}_ck${chunk_size}_gpu${GPUS}_lr${lr}_vlr${vlr}_mlr${mlr}_bs${PER_DEVICE_BATCH_SIZE}
 
-. scripts/env.sh
+
 conda activate eo
 
 accelerate launch $ACCELERATE_ARGS scripts/train.py \

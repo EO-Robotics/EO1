@@ -27,17 +27,33 @@ messages = [
 
 times = 0
 past_key_values = None
+past_pixel_values_n = 0
+past_grid_thw_n = 0
 
 while True:
     if times > 0:
         prompt = input("Enter your prompt: ")
         if prompt == "q":
             exit(0)
-        messages.append({"role": "user", "content": [{"type": "text", "text": prompt}]})
-
+        messages.append(
+            {
+                "role": "user",
+                "content": [
+                    {"type": "image", "image": "demo_data/refcoco/images/COCO_train2014_000000580957_2.jpg"},
+                    {"type": "text", "text": prompt},
+                ],
+            }
+        )
     inputs = processor.apply_chat_template(
         messages, add_generation_prompt=True, tokenize=True, return_dict=True, return_tensors="pt"
     ).to("cuda")
+
+    if "pixel_values" in inputs:
+        inputs["pixel_values"] = inputs["pixel_values"][past_pixel_values_n:]
+        inputs["image_grid_thw"] = inputs["image_grid_thw"][past_grid_thw_n:]
+
+        past_pixel_values_n += inputs["pixel_values"].shape[0]
+        past_grid_thw_n += inputs["image_grid_thw"].shape[0]
 
     input_length = inputs["input_ids"].shape[1]
     outputs = model.generate(

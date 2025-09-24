@@ -28,7 +28,7 @@ def configure_vision_tower(vlm, training_args, compute_dtype, device):
 def configure_llm(vlm, training_args):
     """Configure the LLM."""
     lm_head = vlm.lm_head.parameters()
-    set_requires_grad(lm_head, not training_args.freeze_llm)
+    set_requires_grad(lm_head, not training_args.freeze_lm_head)
 
     llm_params = vlm.model.parameters()
     set_requires_grad(llm_params, not training_args.freeze_llm)

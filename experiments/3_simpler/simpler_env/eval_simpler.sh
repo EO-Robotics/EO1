@@ -1,4 +1,4 @@
-. scripts/env.sh
+
 
 dist_tasks=(
     bridge.sh

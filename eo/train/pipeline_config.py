@@ -64,6 +64,7 @@ class TrainPipelineConfig(TrainingArguments):
     freeze_vision_tower: bool = field(default=False)
     freeze_llm: bool = field(default=False)
     freeze_merger: bool = field(default=False)
+    freeze_lm_head: bool = field(default=False)
     attn_implementation: str = field(default="sdpa")  # sdpa, flash_attention_2, flash_attention_3
 
     lora_enable: bool = False
@@ -97,7 +98,7 @@ class TrainPipelineConfig(TrainingArguments):
             self.freeze_llm = True
             warnings.warn("`freeze_llm` is set to True when `lora_enable`.", stacklevel=2)
 
-        if not self.lora_enable:
+        if not self.lora_enable and self.vision_lora:
             self.vision_lora = False
             warnings.warn("`vision_lora` is set to False when `lora_enable` is False.", stacklevel=2)
 
