@@ -4,9 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project.urls]
 homepage = "https://eo-robotics.ai"
-documentation = "https://github.com/EO-Robotics/EO-1/getting_started"
-source = "https://github.com/EO-Robotics/EO-1"
-issues = "https://github.com/EO-Robotics/EO-1/issues"
+documentation = "https://github.com/EO-Robotics/EO1/getting_started"
+source = "https://github.com/EO-Robotics/EO1"
+issues = "https://github.com/EO-Robotics/EO1/issues"
 discord = "https://discord.com/invite/JqfDs6va"
 
 [project]
@@ -36,8 +36,9 @@ dependencies = [
     # Hugging Face dependencies
     "datasets>=2.19.0,<=3.6.0",
     "huggingface-hub[hf-transfer,cli]>=0.34.2",
-    "lerobot>=0.3.3",
+    "lerobot>=0.3.3,<=0.3.4",
     "transformers==4.56.0",
+    "accelerate>=1.10.1",
 
     # Core dependencies
     "cmake>=3.29.0.1",
@@ -56,6 +57,8 @@ dependencies = [
 
     # Binpacking dependency
     "binpacking>=1.5.0",
+    "qwen_vl_utils>=0.0.11",
+    "ujson>=5.11.0",
 ]
 # Optional dependencies
 [project.optional-dependencies]
