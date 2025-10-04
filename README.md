@@ -67,8 +67,8 @@ We introduce **EO-1** model, an open-source unified embodied foundation model co
 Clone the repository:
 
 ```bash
-git clone https://github.com/EO-Robotics/EO-1.git
-cd EO-1
+git clone https://github.com/EO-Robotics/EO1.git
+cd EO1
 ```
 
 Create a conda environment and install dependencies:
@@ -79,14 +79,13 @@ conda create -n eo python=3.10
 conda activate eo
 pip install --upgrade setuptools
 
-# install flash-attn 2
-MAX_JOBS=4 pip install flash-attn==2.8.3 --no-build-isolation
-
 # [recommended] ⭐️ install flash-attn 3 from source with H100 / H800 GPU, CUDA 12.8 for best performance
 # git clone https://github.com/Dao-AILab/flash-attn.git -b v2.8.3 --recursive --depth 1
 # cd hopper && python setup.py install
-
 pip install -e .
+
+# install flash-attn 2
+MAX_JOBS=4 pip install flash-attn==2.8.3 --no-build-isolation
 ```
 
 ## Examples
@@ -312,6 +311,10 @@ Robot Control Benchmark Results
 - [ ] 🤗 Release [pre-training models](https://huggingface.co/collections/IPEC-COMMUNITY/eo-robotics-68ac4ff30e1f746cac28ca14), Interleaved Dataset `EO-Data1.5M` and benchmark `EO-Bench`.
 - [ ] ⚡️ Efficient LLM Inference over Long Sequences, Efficient KV-cache, etc.
 - [ ] 🤖 Integrate with human feedback fine-tuning.
+
+## Troubleshooting
+
+1. If you encounter the error `FFmpeg is not properly installed in your environment. We support`, you can install it with `conda install ffmpeg`.
 
 ## 🤝 Contributing
 

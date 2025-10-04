@@ -29,7 +29,7 @@ class MMDatasetConfig:
 @dataclass
 class LerobotConfig:
     repo_id: str
-    root: str
+    root: str | None = None
     episodes: list[int] | None = None
     delta_action: bool = False
     state_mode: str = "MEAN_STD"
