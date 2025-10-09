@@ -149,13 +149,13 @@ messages = [
 ]
 
 # 2. text generation [multimodal reasoning]
-input_length = inputs["input_ids"].shape[1]
 inputs = processor.apply_chat_template(
   messages,
   tokenize=True,
   return_dict=True,
   return_tensors="pt"
 ).to("cuda")
+input_length = inputs["input_ids"].shape[1]
 
 outputs = model.generate(**inputs, max_new_tokens=1024, return_dict_in_generate=True)
 generated_ids = outputs.sequences
