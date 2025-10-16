@@ -57,7 +57,7 @@ dependencies = [
 
     # Binpacking dependency
     "binpacking>=1.5.0",
-    "qwen_vl_utils=0.0.11",
+    "qwen_vl_utils==0.0.11",
     "ujson>=5.11.0",
 ]
 # Optional dependencies
