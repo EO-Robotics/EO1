@@ -47,6 +47,9 @@
   </a>
 </p>
 
+>  项目将移至团队的主项目仓库以便集中维护与更新. The project will be moved to the team’s main repository for centralized maintenance and updates.
+>  👉 https://github.com/SHAILAB-IPEC/EO1
+
 ## Interleaved Vision-Text-Action Pretraining for General Robot Control
 
 We introduce **EO-1** model, an open-source unified embodied foundation model comprising 3B parameters, trained on the carefully curated interleaved embodied dataset EO-Data1.5M, Web Multimodal Data, and Robot Control Data (AgiBotWorld, Open X-Embodiment, RoboMIND, SO100-Community, etc.). The **EO-1** model adopt a single unified decoder-only transformer that integrates discrete auto-regressive decoding with continuous flow matching denoising for multimodal embodied reasoning and robot control, enabling seamless perception, planning, reasoning, and acting in single model. This work highlights the following features:
