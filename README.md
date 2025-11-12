@@ -78,7 +78,7 @@ Create a conda environment and install dependencies:
 
 ```bash
 # create conda environment
-conda create -n eo python=3.10
+conda create -n eo python=3.11
 conda activate eo
 pip install --upgrade setuptools
 
